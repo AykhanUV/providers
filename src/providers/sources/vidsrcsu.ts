@@ -79,7 +79,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
                 }),
               );
 
-              const proxyUrl = `https://m3u8.wafflehacker.io/m3u8-proxy?url=${encodedUrl}&headers=${encodedHeaders}`;
+              const proxyUrl = `https://proxy.fithwit.net/m3u8-proxy?url=${encodedUrl}&headers=${encodedHeaders}`;
               // eslint-disable-next-line no-console
               console.log('Created proxy URL:', proxyUrl);
 
@@ -117,7 +117,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 export const vidsrcsuScraper = makeSourcerer({
   id: 'vidsrcsu',
   name: 'VidSrc 🐝',
-  rank: 242,
+  rank: 241,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
