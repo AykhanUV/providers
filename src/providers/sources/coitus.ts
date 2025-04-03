@@ -67,7 +67,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 
 export const coitusScraper = makeSourcerer({
   id: 'coitus',
-  name: 'Caitus 🐸',
+  name: 'Cactus 🌵',
   rank: 91,
   disabled: false,
   flags: [flags.CORS_ALLOWED],

@@ -56,21 +56,22 @@ const providers = [
     name: 'FED API (Private)',
     useToken: true,
     useCacheUrl: false,
-  },
-  {
-    id: 'fedapi-shared',
-    rank: 302,
-    name: 'FED API (Shared)',
-    useToken: false,
-    useCacheUrl: false,
     disabled: true,
   },
   {
     id: 'feddb',
-    rank: 301,
+    rank: 302,
     name: 'Database',
     useToken: false,
     useCacheUrl: true,
+  },
+  {
+    id: 'fedapi-shared',
+    rank: 301,
+    name: 'FED API (Shared)',
+    useToken: false,
+    useCacheUrl: false,
+    disabled: true,
   },
 ];
 
@@ -125,7 +126,13 @@ function embed(provider: {
         headers: Object.keys(headers).length > 0 ? headers : undefined,
       });
 
-      if (data?.error === 'No results found in MovieBox search') {
+      if (data?.error && data.error.startsWith('No results found in MovieBox search')) {
+        throw new NotFoundError('No stream found');
+      }
+      if (data?.error === 'No cached data found for this episode') {
+        throw new NotFoundError('No stream found');
+      }
+      if (data?.error === 'No cached data found for this ID') {
         throw new NotFoundError('No stream found');
       }
       if (!data) throw new NotFoundError('No response from API');
