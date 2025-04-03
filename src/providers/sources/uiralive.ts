@@ -56,7 +56,7 @@ export const uiraliveScraper = makeSourcerer({
   id: 'uiralive',
   name: 'Uira 🔥',
   rank: 250,
-  disabled: false,
+  disabled: true,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
