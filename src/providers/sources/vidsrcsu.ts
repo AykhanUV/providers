@@ -118,7 +118,7 @@ export const vidsrcsuScraper = makeSourcerer({
   id: 'vidsrcsu',
   name: 'VidSrc 🐝',
   rank: 250,
-  disabled: true, // no mi vidsrc 😔
+  disabled: false,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
