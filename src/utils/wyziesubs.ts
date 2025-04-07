@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { type SubtitleData, searchSubtitles } from 'wyzie-lib';
 
 import { Caption } from '@/providers/captions';
@@ -39,7 +40,6 @@ export async function addWyzieCaptions(
       type: subtitle.format as 'srt' | 'vtt',
       hasCorsRestrictions: false,
       language: subtitle.language,
-      wyziesubs: true,
     }));
 
     return [...captions, ...wyzieCaptions];
