@@ -61,6 +61,7 @@ import { warezcdnembedHlsScraper } from './embeds/warezcdn/hls';
 import { warezcdnembedMp4Scraper } from './embeds/warezcdn/mp4';
 import { warezPlayerScraper } from './embeds/warezcdn/warezplayer';
 import { webtor1080Scraper, webtor480Scraper, webtor4kScraper, webtor720Scraper } from './embeds/webtor';
+import { EightStreamScraper } from './sources/8stream';
 import { coitusScraper } from './sources/coitus';
 import { embedsuScraper } from './sources/embedsu';
 import { FedAPIScraper } from './sources/fedapi';
@@ -104,6 +105,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     streamboxScraper,
     nunflixScraper,
     riveScraper,
+    EightStreamScraper,
   ];
 }
 
