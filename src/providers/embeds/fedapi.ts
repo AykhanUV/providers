@@ -9,15 +9,6 @@ import { Caption } from '../captions';
 const BASE_URL = 'https://fed-api.pstream.org';
 const CACHE_URL = 'https://fed-api.pstream.org/cache';
 
-const getShareConsent = (): string | null => {
-  try {
-    return typeof window !== 'undefined' ? window.localStorage.getItem('share-token') : null;
-  } catch (e) {
-    console.warn('Unable to access localStorage:', e);
-    return null;
-  }
-};
-
 // Language mapping for subtitles
 const languageMap: Record<string, string> = {
   English: 'en',
@@ -56,7 +47,6 @@ const providers = [
     name: 'FED API (Private)',
     useToken: true,
     useCacheUrl: false,
-    disabled: true,
   },
   {
     id: 'feddb',
@@ -64,14 +54,6 @@ const providers = [
     name: 'Database',
     useToken: false,
     useCacheUrl: true,
-  },
-  {
-    id: 'fedapi-shared',
-    rank: 301,
-    name: 'FED API (Shared)',
-    useToken: false,
-    useCacheUrl: false,
-    disabled: true,
   },
 ];
 
@@ -115,12 +97,6 @@ function embed(provider: {
         headers['ui-token'] = query.token;
       }
 
-      // Add share-token header if it's set to "true" in localStorage
-      const shareToken = getShareConsent();
-      if (shareToken === 'true') {
-        headers['share-token'] = 'true';
-      }
-
       // Fetch data from the API
       const data = await ctx.fetcher<StreamData>(apiUrl, {
         headers: Object.keys(headers).length > 0 ? headers : undefined,
@@ -142,15 +118,28 @@ function embed(provider: {
       // Process streams data
       const streams = Object.entries(data.streams).reduce((acc: Record<string, string>, [quality, url]) => {
         let qualityKey: number;
+        if (quality === 'ORG') {
+          acc.unknown = url;
+          return acc;
+        }
         if (quality === '4K') {
           qualityKey = 2160;
-        } else if (quality === 'ORG') {
-          return acc;
         } else {
           qualityKey = parseInt(quality.replace('P', ''), 10);
         }
         if (Number.isNaN(qualityKey) || acc[qualityKey]) return acc;
         acc[qualityKey] = url;
+        return acc;
+      }, {});
+
+      // Filter qualities based on provider type
+      const filteredStreams = Object.entries(streams).reduce((acc: Record<string, string>, [quality, url]) => {
+        // Skip unknown for cached provider
+        if (provider.useCacheUrl && quality === 'unknown') {
+          return acc;
+        }
+
+        acc[quality] = url;
         return acc;
       }, {});
 
@@ -186,34 +175,40 @@ function embed(provider: {
             id: 'primary',
             captions,
             qualities: {
-              ...(streams[2160] && {
+              ...(filteredStreams[2160] && {
                 '4k': {
                   type: 'mp4',
-                  url: streams[2160],
+                  url: filteredStreams[2160],
                 },
               }),
-              ...(streams[1080] && {
+              ...(filteredStreams[1080] && {
                 1080: {
                   type: 'mp4',
-                  url: streams[1080],
+                  url: filteredStreams[1080],
                 },
               }),
-              ...(streams[720] && {
+              ...(filteredStreams[720] && {
                 720: {
                   type: 'mp4',
-                  url: streams[720],
+                  url: filteredStreams[720],
                 },
               }),
-              ...(streams[480] && {
+              ...(filteredStreams[480] && {
                 480: {
                   type: 'mp4',
-                  url: streams[480],
+                  url: filteredStreams[480],
                 },
               }),
-              ...(streams[360] && {
+              ...(filteredStreams[360] && {
                 360: {
                   type: 'mp4',
-                  url: streams[360],
+                  url: filteredStreams[360],
+                },
+              }),
+              ...(filteredStreams.unknown && {
+                unknown: {
+                  type: 'mp4',
+                  url: filteredStreams.unknown,
                 },
               }),
             },
@@ -226,4 +221,4 @@ function embed(provider: {
   });
 }
 
-export const [FedAPIPrivateScraper, FedAPISharedScraper, FedDBScraper] = providers.map(embed);
+export const [FedAPIPrivateScraper, FedDBScraper] = providers.map(embed);

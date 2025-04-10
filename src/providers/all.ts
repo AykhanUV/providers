@@ -35,7 +35,7 @@ import {
   autoembedTeluguScraper,
 } from './embeds/autoembed';
 import { closeLoadScraper } from './embeds/closeload';
-import { FedAPIPrivateScraper, FedAPISharedScraper, FedDBScraper } from './embeds/fedapi';
+import { FedAPIPrivateScraper, FedDBScraper } from './embeds/fedapi';
 import { mp4hydraServer1Scraper, mp4hydraServer2Scraper } from './embeds/mp4hydra';
 import { ridooScraper } from './embeds/ridoo';
 import { streamtapeScraper } from './embeds/streamtape';
@@ -152,7 +152,6 @@ export function gatherAllEmbeds(): Array<Embed> {
     webtor480Scraper,
     viperScraper,
     FedAPIPrivateScraper,
-    FedAPISharedScraper,
     FedDBScraper,
     riveAsiacloudScraper,
     riveEe3Scraper,

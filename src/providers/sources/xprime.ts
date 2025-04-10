@@ -61,7 +61,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
       {
         type: 'hls',
         id: 'primary',
-        playlist: `https://oca.kendrickl-3amar.site/?v=${encodeURIComponent(data.url)}&headers=${encodeURIComponent(JSON.stringify({ referer: 'https://megacloud.store/', origin: 'https://megacloud.store' }))}`,
+        playlist: `https://proxy.fifthwit.net/m3u8-proxy?url=${encodeURIComponent(data.url)}&headers=${encodeURIComponent(JSON.stringify({ referer: 'https://megacloud.store/', origin: 'https://megacloud.store' }))}`,
         flags: [flags.CORS_ALLOWED],
         captions,
       },

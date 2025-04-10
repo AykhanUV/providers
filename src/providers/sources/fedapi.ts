@@ -25,26 +25,11 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   const userToken = getUserToken();
   const embeds = [];
 
-  if (userToken) {
-    embeds.push({
-      embedId: 'fedapi-private',
-      url: `${JSON.stringify({ ...query, token: userToken })}`,
-    });
-  }
-
-  if (!userToken) {
-    embeds.push({
-      embedId: 'fedapi-shared',
-      url: `${JSON.stringify(query)}`,
-    });
-  }
-
-  if (!userToken) {
-    embeds.push({
-      embedId: 'feddb',
-      url: `${JSON.stringify(query)}`,
-    });
-  }
+  
+  embeds.push({
+    embedId: 'feddb',
+    url: `${JSON.stringify(query)}`,
+  });
 
   return {
     embeds,
