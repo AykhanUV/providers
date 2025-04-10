@@ -77,6 +77,7 @@ import { uiraliveScraper } from './sources/uiralive';
 import { vidapiClickScraper } from './sources/vidapiclick';
 import { warezcdnScraper } from './sources/warezcdn';
 import { webtorScraper } from './sources/webtor';
+import { xprimeScraper } from './sources/xprime';
 
 export function gatherAllSources(): Array<Sourcerer> {
   // all sources are gathered here
@@ -106,6 +107,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     nunflixScraper,
     riveScraper,
     EightStreamScraper,
+    xprimeScraper,
   ];
 }
 
