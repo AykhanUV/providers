@@ -41,7 +41,7 @@ const languageMap: Record<string, string> = {
 export const xprimeFoxEmbed = makeEmbed({
   id: 'xprime-fox',
   name: 'Fox',
-  rank: 241,
+  rank: 240,
   async scrape(ctx): Promise<EmbedOutput> {
     const query = JSON.parse(ctx.url);
     const params = new URLSearchParams({
@@ -127,7 +127,7 @@ export const xprimeApolloEmbed = makeEmbed({
 export const xprimeStreamboxEmbed = makeEmbed({
   id: 'xprime-streambox',
   name: 'Streambox',
-  rank: 240,
+  rank: 241,
   async scrape(ctx): Promise<EmbedOutput> {
     const query = JSON.parse(ctx.url);
     let url = showboxBaseUrl;
