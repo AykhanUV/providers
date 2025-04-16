@@ -64,7 +64,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 export const embedsuScraper = makeSourcerer({
   id: 'embedsu',
   name: 'IceFY 🧊',
-  rank: 242,
+  rank: 240,
   disabled: false, // i need to set up an m3u8 proxy
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,

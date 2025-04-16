@@ -35,7 +35,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 export const xprimeScraper = makeSourcerer({
   id: 'xprimetv',
   name: 'XPrime 💣',
-  rank: 240,
+  rank: 242,
   disabled: false,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
