@@ -4,7 +4,7 @@ import { EmbedOutput, makeEmbed } from '@/providers/base';
 import { NotFoundError } from '@/utils/errors';
 
 const foxBaseUrl = 'https://xprime.tv/foxtemp';
-const apolloBaseUrl = 'https://cors.samj.app/?destination=https://kendrickl-3amar.site';
+const apolloBaseUrl = 'https://kendrickl-3amar.site';
 const showboxBaseUrl = 'https://xprime.tv/primebox';
 
 const languageMap: Record<string, string> = {
@@ -84,7 +84,7 @@ export const xprimeFoxEmbed = makeEmbed({
 
 export const xprimeApolloEmbed = makeEmbed({
   id: 'xprime-apollo',
-  name: 'Apollo (A)',
+  name: 'Apollo',
   disabled: false,
   rank: 242,
   async scrape(ctx): Promise<EmbedOutput> {
@@ -95,7 +95,13 @@ export const xprimeApolloEmbed = makeEmbed({
       url += `/${query.season}/${query.episode}`;
     }
 
-    const data = await ctx.fetcher(url);
+    const data = await ctx.proxiedFetcher(url, {
+      baseUrl: apolloBaseUrl,
+      headers: {
+        Referer: `https://pstream.org`,
+        Origin: `https://pstream.org`,
+      },
+    });
 
     if (!data) throw new NotFoundError('No response received');
     if (data.error) throw new NotFoundError(data.error);

@@ -25,11 +25,19 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   const userToken = getUserToken();
   const embeds = [];
 
-  
-  embeds.push({
-    embedId: 'feddb',
-    url: `${JSON.stringify(query)}`,
-  });
+  if (userToken) {
+    embeds.push({
+      embedId: 'fedapi-private',
+      url: `${JSON.stringify({ ...query, token: userToken })}`,
+    });
+  }
+
+  if (!userToken) {
+    embeds.push({
+      embedId: 'feddb',
+      url: `${JSON.stringify(query)}`,
+    });
+  }
 
   return {
     embeds,
@@ -39,7 +47,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 export const FedAPIScraper = makeSourcerer({
   id: 'fedapi',
   name: 'Febbox ⭐️',
-  rank: 260, 
+  rank: 260,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
