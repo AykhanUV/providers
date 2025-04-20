@@ -35,6 +35,12 @@ import {
   autoembedTeluguScraper,
 } from './embeds/autoembed';
 import { closeLoadScraper } from './embeds/closeload';
+import {
+  ConsumetStreamSBScraper,
+  ConsumetStreamTapeScraper,
+  ConsumetVidCloudScraper,
+  ConsumetVidStreamingScraper,
+} from './embeds/consumet';
 import { FedAPIPrivateScraper, FedDBScraper } from './embeds/fedapi';
 import { mp4hydraServer1Scraper, mp4hydraServer2Scraper } from './embeds/mp4hydra';
 import { ridooScraper } from './embeds/ridoo';
@@ -64,6 +70,7 @@ import { webtor1080Scraper, webtor480Scraper, webtor4kScraper, webtor720Scraper 
 import { xprimeApolloEmbed, xprimeFoxEmbed, xprimeStreamboxEmbed } from './embeds/xprime';
 import { EightStreamScraper } from './sources/8stream';
 import { coitusScraper } from './sources/coitus';
+import { ConsumetScraper } from './sources/consumet';
 import { embedsuScraper } from './sources/embedsu';
 import { FedAPIScraper } from './sources/fedapi';
 import { hdRezkaScraper } from './sources/hdrezka';
@@ -109,6 +116,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     riveScraper,
     EightStreamScraper,
     xprimeScraper,
+    ConsumetScraper,
   ];
 }
 
@@ -169,5 +177,9 @@ export function gatherAllEmbeds(): Array<Embed> {
     xprimeFoxEmbed,
     xprimeApolloEmbed,
     xprimeStreamboxEmbed,
+    ConsumetVidCloudScraper,
+    ConsumetStreamSBScraper,
+    ConsumetVidStreamingScraper,
+    ConsumetStreamTapeScraper,
   ];
 }
