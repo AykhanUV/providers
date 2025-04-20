@@ -9,7 +9,7 @@ async function consumetScraper(ctx: ShowScrapeContext): Promise<SourcererOutput>
   const searchQuery = ctx.media.title;
   const page = 1;
 
-  const searchUrl = `https://consumet.pstream.org/anime/zoro/${encodeURIComponent(searchQuery)}?page=${page}`;
+  const searchUrl = `https://consumet.aether.mom/anime/zoro/${encodeURIComponent(searchQuery)}?page=${page}`;
   const searchResponse = await ctx.fetcher<SearchResponse>(searchUrl);
 
   if (!searchResponse?.results?.length) {
@@ -21,7 +21,7 @@ async function consumetScraper(ctx: ShowScrapeContext): Promise<SourcererOutput>
     searchResponse.results[0];
 
   // Get episode list
-  const infoUrl = `https://consumet.pstream.org/anime/zoro/info?id=${bestMatch.id}`;
+  const infoUrl = `https://consumet.aether.mom/anime/zoro/info?id=${bestMatch.id}`;
   const infoResponse = await ctx.fetcher<InfoResponse>(infoUrl);
 
   if (!infoResponse?.episodes?.length) {
