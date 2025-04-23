@@ -14,7 +14,7 @@ import {
   hianimeHd2SubEmbed,
 } from '@/providers/embeds/hianime';
 import { warezcdnembedMp4Scraper } from '@/providers/embeds/warezcdn/mp4';
-import { xprimeApolloEmbed, xprimeFoxEmbed, xprimeStreamboxEmbed } from '@/providers/embeds/xprime';
+import { xprimeApolloEmbed, xprimeFoxEmbed, xprimeMarantEmbed, xprimeStreamboxEmbed } from '@/providers/embeds/xprime';
 import { embedsuScraper } from '@/providers/sources/embedsu';
 import { uiraliveScraper } from '@/providers/sources/uiralive';
 import { Stream } from '@/providers/streams';
@@ -35,6 +35,7 @@ const SKIP_VALIDATION_CHECK_IDS = [
   xprimeFoxEmbed.id,
   xprimeApolloEmbed.id,
   xprimeStreamboxEmbed.id,
+  xprimeMarantEmbed.id,
   ConsumetVidCloudScraper.id,
   ConsumetStreamSBScraper.id,
   ConsumetVidStreamingScraper.id,
