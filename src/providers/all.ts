@@ -7,20 +7,6 @@ import {
   hianimeHd2SubEmbed,
 } from '@/providers/embeds/hianime';
 import { mixdropScraper } from '@/providers/embeds/mixdrop';
-import {
-  riveAsiacloudScraper,
-  riveEe3Scraper,
-  riveFastxScraper,
-  riveFilmechoScraper,
-  riveG1Scraper,
-  riveG2Scraper,
-  riveGhostScraper,
-  riveGuruScraper,
-  riveHydraxScraper,
-  riveKageScraper,
-  riveNovaScraper,
-  rivePutafilmeScraper,
-} from '@/providers/embeds/rive';
 import { turbovidScraper } from '@/providers/embeds/turbovid';
 import { upcloudScraper } from '@/providers/embeds/upcloud';
 import { autoembedScraper } from '@/providers/sources/autoembed';
@@ -30,7 +16,6 @@ import { fsharetvScraper } from '@/providers/sources/fsharetv';
 import { hianimeScraper } from '@/providers/sources/hianime';
 import { insertunitScraper } from '@/providers/sources/insertunit';
 import { mp4hydraScraper } from '@/providers/sources/mp4hydra';
-import { riveScraper } from '@/providers/sources/rive';
 import { tugaflixScraper } from '@/providers/sources/tugaflix';
 import { vidsrcsuScraper } from '@/providers/sources/vidsrcsu';
 
@@ -120,7 +105,6 @@ export function gatherAllSources(): Array<Sourcerer> {
     coitusScraper,
     streamboxScraper,
     nunflixScraper,
-    riveScraper,
     EightStreamScraper,
     xprimeScraper,
     ConsumetScraper,
@@ -170,18 +154,6 @@ export function gatherAllEmbeds(): Array<Embed> {
     viperScraper,
     FedAPIPrivateScraper,
     FedDBScraper,
-    riveAsiacloudScraper,
-    riveEe3Scraper,
-    riveFastxScraper,
-    riveFilmechoScraper,
-    riveG1Scraper,
-    riveG2Scraper,
-    riveGhostScraper,
-    riveGuruScraper,
-    riveHydraxScraper,
-    riveKageScraper,
-    riveNovaScraper,
-    rivePutafilmeScraper,
     xprimeFoxEmbed,
     xprimeApolloEmbed,
     xprimeStreamboxEmbed,
