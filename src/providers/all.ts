@@ -1,5 +1,11 @@
 import { Embed, Sourcerer } from '@/providers/base';
 import { doodScraper } from '@/providers/embeds/dood';
+import {
+  hianimeHd1DubEmbed,
+  hianimeHd1SubEmbed,
+  hianimeHd2DubEmbed,
+  hianimeHd2SubEmbed,
+} from '@/providers/embeds/hianime';
 import { mixdropScraper } from '@/providers/embeds/mixdrop';
 import {
   riveAsiacloudScraper,
@@ -21,6 +27,7 @@ import { autoembedScraper } from '@/providers/sources/autoembed';
 import { catflixScraper } from '@/providers/sources/catflix';
 import { ee3Scraper } from '@/providers/sources/ee3';
 import { fsharetvScraper } from '@/providers/sources/fsharetv';
+import { hianimeScraper } from '@/providers/sources/hianime';
 import { insertunitScraper } from '@/providers/sources/insertunit';
 import { mp4hydraScraper } from '@/providers/sources/mp4hydra';
 import { riveScraper } from '@/providers/sources/rive';
@@ -117,6 +124,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     EightStreamScraper,
     xprimeScraper,
     ConsumetScraper,
+    hianimeScraper,
   ];
 }
 
@@ -181,5 +189,9 @@ export function gatherAllEmbeds(): Array<Embed> {
     ConsumetStreamSBScraper,
     ConsumetVidStreamingScraper,
     ConsumetStreamTapeScraper,
+    hianimeHd1DubEmbed,
+    hianimeHd2DubEmbed,
+    hianimeHd1SubEmbed,
+    hianimeHd2SubEmbed,
   ];
 }
