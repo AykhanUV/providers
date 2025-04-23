@@ -4,7 +4,7 @@ import { NotFoundError } from '@/utils/errors';
 
 export const hianimeHd1DubEmbed = makeEmbed({
   id: 'hianime-hd1-dub',
-  name: 'Hianime HD-1 (Dub)',
+  name: 'HD-1 (Dub)',
   disabled: true,
   rank: 250,
   async scrape(ctx): Promise<EmbedOutput> {
@@ -42,7 +42,7 @@ export const hianimeHd1DubEmbed = makeEmbed({
 
 export const hianimeHd2DubEmbed = makeEmbed({
   id: 'hianime-hd2-dub',
-  name: 'Hianime HD-2 (Dub)',
+  name: 'HD-2 (Dub)',
   rank: 251,
   async scrape(ctx): Promise<EmbedOutput> {
     const query = JSON.parse(ctx.url);
@@ -55,11 +55,34 @@ export const hianimeHd2DubEmbed = makeEmbed({
     const thumbnailTrack = data.data.tracks?.find((track: { kind: string }) => track.kind === 'thumbnails')?.file;
 
     return {
+      stream: [
+        {
+          type: 'hls',
+          id: 'primary',
+          playlist: `https://proxy-m3u8.uira.live/m3u8-proxy?url=${data.data.sources[0].url}&headers=${encodeURIComponent(JSON.stringify(data.data.headers))}`,
+          flags: [flags.CORS_ALLOWED],
+          captions: [],
+          ...(thumbnailTrack
+            ? {
+                thumbnailTrack: {
+                  type: 'vtt',
+                  url: thumbnailTrack,
+                },
+              }
+            : {}),
+          // headers: data.data.headers,
+        },
+      ],
       // stream: [
       //   {
-      //     type: 'hls',
+      //     type: 'file',
       //     id: 'primary',
-      //     playlist: data.data.sources[0].url,
+      //     qualities: {
+      //       unknown: {
+      //         type: 'mp4',
+      //         url: data.data.sources[0].url,
+      //       },
+      //     },
       //     flags: [flags.CORS_ALLOWED],
       //     captions: [],
       //     ...(thumbnailTrack
@@ -73,36 +96,13 @@ export const hianimeHd2DubEmbed = makeEmbed({
       //     headers: data.data.headers,
       //   },
       // ],
-      stream: [
-        {
-          type: 'file',
-          id: 'primary',
-          qualities: {
-            unknown: {
-              type: 'mp4',
-              url: data.data.sources[0].url,
-            },
-          },
-          flags: [flags.CORS_ALLOWED],
-          captions: [],
-          ...(thumbnailTrack
-            ? {
-                thumbnailTrack: {
-                  type: 'vtt',
-                  url: thumbnailTrack,
-                },
-              }
-            : {}),
-          headers: data.data.headers,
-        },
-      ],
     };
   },
 });
 
 export const hianimeHd1SubEmbed = makeEmbed({
   id: 'hianime-hd1-sub',
-  name: 'Hianime HD-1 (Sub)',
+  name: 'HD-1 (Sub)',
   disabled: true,
   rank: 252,
   async scrape(ctx): Promise<EmbedOutput> {
@@ -140,7 +140,7 @@ export const hianimeHd1SubEmbed = makeEmbed({
 
 export const hianimeHd2SubEmbed = makeEmbed({
   id: 'hianime-hd2-sub',
-  name: 'Hianime HD-2 (Sub)',
+  name: 'HD-2 (Sub)',
   rank: 253,
   async scrape(ctx): Promise<EmbedOutput> {
     const query = JSON.parse(ctx.url);
@@ -153,11 +153,34 @@ export const hianimeHd2SubEmbed = makeEmbed({
     const thumbnailTrack = data.data.tracks?.find((track: { kind: string }) => track.kind === 'thumbnails')?.file;
 
     return {
+      stream: [
+        {
+          type: 'hls',
+          id: 'primary',
+          playlist: `https://proxy-m3u8.uira.live/m3u8-proxy?url=${data.data.sources[0].url}&headers=${encodeURIComponent(JSON.stringify(data.data.headers))}`,
+          flags: [flags.CORS_ALLOWED],
+          captions: [],
+          ...(thumbnailTrack
+            ? {
+                thumbnailTrack: {
+                  type: 'vtt',
+                  url: thumbnailTrack,
+                },
+              }
+            : {}),
+          // headers: data.data.headers,
+        },
+      ],
       // stream: [
       //   {
-      //     type: 'hls',
+      //     type: 'file',
       //     id: 'primary',
-      //     playlist: data.data.sources[0].url,
+      //     qualities: {
+      //       unknown: {
+      //         type: 'mp4',
+      //         url: data.data.sources[0].url,
+      //       },
+      //     },
       //     flags: [flags.CORS_ALLOWED],
       //     captions: [],
       //     ...(thumbnailTrack
@@ -171,29 +194,6 @@ export const hianimeHd2SubEmbed = makeEmbed({
       //     headers: data.data.headers,
       //   },
       // ],
-      stream: [
-        {
-          type: 'file',
-          id: 'primary',
-          qualities: {
-            unknown: {
-              type: 'mp4',
-              url: data.data.sources[0].url,
-            },
-          },
-          flags: [flags.CORS_ALLOWED],
-          captions: [],
-          ...(thumbnailTrack
-            ? {
-                thumbnailTrack: {
-                  type: 'vtt',
-                  url: thumbnailTrack,
-                },
-              }
-            : {}),
-          headers: data.data.headers,
-        },
-      ],
     };
   },
 });
