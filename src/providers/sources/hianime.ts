@@ -24,7 +24,7 @@ interface HianimeEpisodeResult {
 }
 
 async function searchAnime(title: string): Promise<string> {
-  const response = await fetch(`https://hianime.pstream.org/api/v2/hianime/search?q=${encodeURIComponent(title)}`);
+  const response = await fetch(`https://hianime.aether.mom/api/v2/hianime/search?q=${encodeURIComponent(title)}`);
   if (!response.ok) throw new Error('Failed to search anime');
   const data: HianimeSearchResult = await response.json();
 
@@ -37,7 +37,7 @@ async function searchAnime(title: string): Promise<string> {
 }
 
 async function fetchEpisodeData(animeId: string): Promise<HianimeEpisodeResult> {
-  const response = await fetch(`https://hianime.pstream.org/api/v2/hianime/anime/${animeId}/episodes`);
+  const response = await fetch(`https://hianime.aether.mom/api/v2/hianime/anime/${animeId}/episodes`);
   if (!response.ok) throw new Error('Failed to fetch episode data');
   return response.json();
 }
@@ -84,7 +84,7 @@ async function comboScraper(ctx: ShowScrapeContext): Promise<SourcererOutput> {
 
 export const hianimeScraper = makeSourcerer({
   id: 'hianime',
-  name: 'Hianime',
+  name: 'HiAnime ⛩️',
   rank: 7,
   disabled: false,
   flags: [flags.CORS_ALLOWED],
