@@ -31,6 +31,10 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
       embedId: 'xprime-marant',
       url: JSON.stringify(query),
     },
+    {
+      embedId: 'xprime-primenet',
+      url: JSON.stringify(query),
+    },
   ];
 
   return { embeds };
