@@ -20,6 +20,17 @@ import { tugaflixScraper } from '@/providers/sources/tugaflix';
 import { vidsrcsuScraper } from '@/providers/sources/vidsrcsu';
 
 import {
+  oneServerAnimepaheEmbed,
+  oneServerAnizoneEmbed,
+  oneServerAutoembedEmbed,
+  oneServerFlixhqEmbed,
+  oneServerFoxstreamEmbed,
+  oneServerGokuEmbed,
+  oneServerHianimeEmbed,
+  oneServerPrimeboxEmbed,
+  oneServerVidsrcsuEmbed,
+} from './embeds/1server';
+import {
   autoembedBengaliScraper,
   autoembedEnglishScraper,
   autoembedHindiScraper,
@@ -66,6 +77,7 @@ import {
   xprimePrimenetEmbed,
   xprimeStreamboxEmbed,
 } from './embeds/xprime';
+import { oneServerScraper } from './sources/1server';
 import { EightStreamScraper } from './sources/8stream';
 import { coitusScraper } from './sources/coitus';
 import { ConsumetScraper } from './sources/consumet';
@@ -115,6 +127,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     xprimeScraper,
     ConsumetScraper,
     hianimeScraper,
+    oneServerScraper,
   ];
 }
 
@@ -173,5 +186,14 @@ export function gatherAllEmbeds(): Array<Embed> {
     hianimeHd2DubEmbed,
     hianimeHd1SubEmbed,
     hianimeHd2SubEmbed,
+    oneServerAutoembedEmbed,
+    oneServerVidsrcsuEmbed,
+    oneServerPrimeboxEmbed,
+    oneServerFoxstreamEmbed,
+    oneServerFlixhqEmbed,
+    oneServerGokuEmbed,
+    oneServerHianimeEmbed,
+    oneServerAnimepaheEmbed,
+    oneServerAnizoneEmbed,
   ];
 }

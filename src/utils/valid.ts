@@ -1,6 +1,17 @@
 // import { alphaScraper, deltaScraper } from '@/providers/embeds/nsbx';
 // import { astraScraper, novaScraper, orionScraper } from '@/providers/embeds/whvx';
 import {
+  oneServerAnimepaheEmbed,
+  oneServerAnizoneEmbed,
+  oneServerAutoembedEmbed,
+  oneServerFlixhqEmbed,
+  oneServerFoxstreamEmbed,
+  oneServerGokuEmbed,
+  oneServerHianimeEmbed,
+  oneServerPrimeboxEmbed,
+  oneServerVidsrcsuEmbed,
+} from '@/providers/embeds/1server';
+import {
   ConsumetStreamSBScraper,
   ConsumetStreamTapeScraper,
   ConsumetVidCloudScraper,
@@ -51,6 +62,15 @@ const SKIP_VALIDATION_CHECK_IDS = [
   hianimeHd1SubEmbed.id,
   hianimeHd2DubEmbed.id,
   hianimeHd2SubEmbed.id,
+  oneServerAutoembedEmbed.id,
+  oneServerVidsrcsuEmbed.id,
+  oneServerPrimeboxEmbed.id,
+  oneServerFoxstreamEmbed.id,
+  oneServerFlixhqEmbed.id,
+  oneServerGokuEmbed.id,
+  oneServerHianimeEmbed.id,
+  oneServerAnimepaheEmbed.id,
+  oneServerAnizoneEmbed.id,
 ];
 
 export function isValidStream(stream: Stream | undefined): boolean {
