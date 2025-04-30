@@ -3,11 +3,11 @@ import { flags } from '@/entrypoint/utils/targets';
 import { EmbedOutput, makeEmbed } from '@/providers/base';
 import { NotFoundError } from '@/utils/errors';
 
-const foxBaseUrl = 'https://xprime.tv/foxtemp';
-const apolloBaseUrl = 'https://kendrickl-3amar.site';
-const showboxBaseUrl = 'https://xprime.tv/primebox';
-const marantBaseUrl = 'https://backend.xprime.tv/marant';
-const primenetBaseUrl = 'https://backend.xprime.tv/primenet';
+const foxBaseUrl = 'https://cors.aether.mom/?destination=https://xprime.tv/foxtemp';
+const apolloBaseUrl = 'https://cors.aether.mom/?destination=https://kendrickl-3amar.site';
+const showboxBaseUrl = 'https://cors.aether.mom/?destination=https://xprime.tv/primebox';
+const marantBaseUrl = 'https://cors.aether.mom/?destination=https://backend.xprime.tv/marant';
+const primenetBaseUrl = 'https://cors.aether.mom/?destination=https://backend.xprime.tv/primenet';
 
 const languageMap: Record<string, string> = {
   'chinese - hong kong': 'zh',
