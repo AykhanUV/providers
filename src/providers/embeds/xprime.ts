@@ -238,7 +238,13 @@ export const xprimePrimenetEmbed = makeEmbed({
   rank: 243,
   async scrape(ctx): Promise<EmbedOutput> {
     const query = JSON.parse(ctx.url);
-    let url = `${primenetBaseUrl}?id=${query.tmdbId}`;
+    // let url = `${primenetBaseUrl}?id=${query.tmdbId}`;
+
+    // if (query.type === 'show') {
+    //   url += `&season=${query.season}&episode=${query.episode}`;
+    // }
+
+    let url = `${primenetBaseUrl}?name=${query.title}&year=${query.releaseYear}&fallback_year=${query.releaseYear}`;
 
     if (query.type === 'show') {
       url += `&season=${query.season}&episode=${query.episode}`;

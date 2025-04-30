@@ -11,6 +11,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
       season: ctx.media.season.number,
       episode: ctx.media.episode.number,
     }),
+    releaseYear: ctx.media.releaseYear,
   };
 
   const embeds = [
