@@ -197,8 +197,8 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
 
 export const riveScraper = makeSourcerer({
   id: 'rive',
-  name: 'Rive 🎸',
-  rank: 235,
+  name: 'Rive',
+  rank: 60,
   disabled: true,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,

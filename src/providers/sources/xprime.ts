@@ -22,7 +22,6 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     {
       embedId: 'xprime-apollo',
       url: JSON.stringify(query),
-      disabled: true,
     },
     {
       embedId: 'xprime-streambox',
@@ -44,7 +43,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 export const xprimeScraper = makeSourcerer({
   id: 'xprimetv',
   name: 'XPrime 💣',
-  rank: 240,
+  rank: 250,
   disabled: false,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
