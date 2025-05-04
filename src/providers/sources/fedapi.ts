@@ -52,6 +52,7 @@ export const FedAPIScraper = makeSourcerer({
   id: 'fedapi',
   name: 'Febbox ⭐️',
   rank: 260,
+  disabled: true
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
