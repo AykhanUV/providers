@@ -193,6 +193,7 @@ export const xprimeMarantEmbed = makeEmbed({
   id: 'xprime-marant',
   name: 'Marant',
   rank: 240,
+  disabled: true,
   async scrape(ctx): Promise<EmbedOutput> {
     const query = JSON.parse(ctx.url);
     let url = `${marantBaseUrl}?id=${query.tmdbId}`;
@@ -227,6 +228,7 @@ export const xprimePrimenetEmbed = makeEmbed({
   id: 'xprime-primenet',
   name: 'Primenet',
   rank: 243,
+  disabled: true,
   async scrape(ctx): Promise<EmbedOutput> {
     const query = JSON.parse(ctx.url);
     let url = `${primenetBaseUrl}?id=${query.tmdbId}`;
