@@ -3,31 +3,31 @@ import { type SubtitleData, searchSubtitles } from 'wyzie-lib';
 
 import { Caption } from '@/providers/captions';
 
-function isSubdlUrl(url: string) {
-  return url.endsWith('.subdl');
-}
+// function isSubdlUrl(url: string) {
+//   return url.endsWith('.subdl');
+// }
 
-export function filterSubtitles(list: Caption[]) {
-  const selected: Record<string, Caption> = {};
+// export function filterSubtitles(list: Caption[]) {
+//   const selected: Record<string, Caption> = {};
 
-  for (const sub of list) {
-    const existing = selected[sub.language];
+//   for (const sub of list) {
+//     const existing = selected[sub.language];
 
-    if (!existing) {
-      selected[sub.language] = sub;
-      continue;
-    }
+//     if (!existing) {
+//       selected[sub.language] = sub;
+//       continue;
+//     }
 
-    const existingIsSubdl = isSubdlUrl(existing.url);
-    const currentIsSubdl = isSubdlUrl(sub.url);
+//     const existingIsSubdl = isSubdlUrl(existing.url);
+//     const currentIsSubdl = isSubdlUrl(sub.url);
 
-    if (existingIsSubdl && !currentIsSubdl) {
-      selected[sub.language] = sub;
-    }
-  }
+//     if (existingIsSubdl && !currentIsSubdl) {
+//       selected[sub.language] = sub;
+//     }
+//   }
 
-  return Object.values(selected);
-}
+//   return Object.values(selected);
+// }
 
 export async function addWyzieCaptions(
   captions: Caption[],
@@ -65,7 +65,7 @@ export async function addWyzieCaptions(
       language: subtitle.language,
     }));
 
-    return [...captions, ...filterSubtitles(wyzieCaptions)];
+    return [...captions, ...wyzieCaptions];
   } catch (error) {
     console.error('Error fetching Wyzie subtitles:', error);
     return captions;
