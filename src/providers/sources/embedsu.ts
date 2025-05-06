@@ -1,4 +1,3 @@
-import { flags } from '@/entrypoint/utils/targets';
 import { SourcererEmbed, SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
@@ -64,9 +63,9 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 export const embedsuScraper = makeSourcerer({
   id: 'embedsu',
   name: 'IceFY 🧊',
-  rank: 242,
-  disabled: false, // i need to set up an m3u8 proxy
-  flags: [flags.CORS_ALLOWED],
+  rank: 170,
+  disabled: false,
+  flags: [],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
 });
