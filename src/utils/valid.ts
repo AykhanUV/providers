@@ -24,6 +24,7 @@ import {
   hianimeHd2DubEmbed,
   hianimeHd2SubEmbed,
 } from '@/providers/embeds/hianime';
+import { viperScraper } from '@/providers/embeds/viper';
 import { warezcdnembedMp4Scraper } from '@/providers/embeds/warezcdn/mp4';
 import {
   xprimeApolloEmbed,
@@ -45,6 +46,7 @@ const SKIP_VALIDATION_CHECK_IDS = [
   // novaScraper.id,
   // astraScraper.id,
   // orionScraper.id,
+  viperScraper.id,
   uiraliveScraper.id,
   embedsuScraper.id,
   FedAPIPrivateScraper.id,
