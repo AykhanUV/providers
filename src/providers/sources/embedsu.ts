@@ -63,7 +63,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 export const embedsuScraper = makeSourcerer({
   id: 'embedsu',
   name: 'IceFY 🧊',
-  rank: 170,
+  rank: 242,
   disabled: false,
   flags: [],
   scrapeMovie: comboScraper,
