@@ -48,12 +48,8 @@ function embed(provider: { id: string; name: string; rank: number }) {
             id: 'primary',
             type: 'hls',
             playlist: videoUrl,
-            flags: [],
+            flags: [flags.CORS_ALLOWED],
             captions: [],
-            headers: {
-              Referer: 'https://streamwish.to/',
-              Origin: 'https://streamwish.to',
-            },
           },
         ],
       };
