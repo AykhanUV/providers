@@ -44,7 +44,7 @@ function createProxyUrl(originalUrl: string, referer?: string): string {
     }),
   );
 
-  return `https://proxy.fifthwit.net/m3u8-proxy?url=${encodedUrl}&headers=${encodedHeaders}`;
+  return `https://m3u8.moonpic.qzz.io/m3u8-proxy?url=${encodedUrl}&headers=${encodedHeaders}`;
 }
 
 function processProxiedURL(url: string): string {
@@ -76,7 +76,7 @@ function processProxiedURL(url: string): string {
 
   // Handle other proxied URLs
   if (url.includes('/m3u8-proxy?url=')) {
-    return url.replace(/https:\/\/[^/]+\/m3u8-proxy/, 'https://proxy.fifthwit.net/m3u8-proxy');
+    return url.replace(/https:\/\/[^/]+\/m3u8-proxy/, 'https://vidproxy.devoplx.com/m3u8-proxy');
   }
 
   return createProxyUrl(url);

@@ -128,7 +128,7 @@ function embed(provider: { id: string; rank: number; name: string; server: strin
           {
             id: 'primary',
             captions,
-            playlist: `https://proxy.fifthwit.net/m3u8-proxy?url=${encodeURIComponent(streams.unknown)}&headers=${encodeURIComponent(JSON.stringify({ ...(data.headers.Referer && { referer: data.headers.Referer }), ...(data.headers.Origin && { origin: data.headers.Origin }) }))}`,
+            playlist: `https://vidproxy.devoplx.com/m3u8-proxy?url=${encodeURIComponent(streams.unknown)}&headers=${encodeURIComponent(JSON.stringify({ ...(data.headers.Referer && { referer: data.headers.Referer }), ...(data.headers.Origin && { origin: data.headers.Origin }) }))}`,
             type: 'hls',
             flags: [flags.CORS_ALLOWED],
             ...(thumbnailTrack && {

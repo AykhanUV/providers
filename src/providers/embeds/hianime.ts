@@ -21,7 +21,7 @@ export const hianimeHd1DubEmbed = makeEmbed({
         {
           type: 'hls',
           id: 'primary',
-          playlist: `https://proxy.fifthwit.net/m3u8-proxy?url=${data.data.sources[0].url}&headers=${encodeURIComponent(JSON.stringify(data.data.headers))}`,
+          playlist: `https://vidproxy.devoplx.com/m3u8-proxy?url=${data.data.sources[0].url}&headers=${encodeURIComponent(JSON.stringify(data.data.headers))}`,
           flags: [flags.CORS_ALLOWED],
           captions: [],
           ...(thumbnailTrack
@@ -57,7 +57,7 @@ export const hianimeHd2DubEmbed = makeEmbed({
         {
           type: 'hls',
           id: 'primary',
-          playlist: `https://proxy.fifthwit.net/m3u8-proxy?url=${data.data.sources[0].url}&headers=${encodeURIComponent(JSON.stringify(data.data.headers))}`,
+          playlist: `https://m3u8.moonpic.qzz.io/m3u8-proxy?url=${data.data.sources[0].url}&headers=${encodeURIComponent(JSON.stringify(data.data.headers))}`,
           flags: [flags.CORS_ALLOWED],
           captions: [],
           ...(thumbnailTrack
