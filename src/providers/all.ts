@@ -49,6 +49,7 @@ import { mp4hydraServer1Scraper, mp4hydraServer2Scraper } from './embeds/mp4hydr
 import { ridooScraper } from './embeds/ridoo';
 import { streamtapeScraper } from './embeds/streamtape';
 import { streamvidScraper } from './embeds/streamvid';
+import { streamwishEnglishScraper, streamwishLatinoScraper, streamwishSpanishScraper } from './embeds/streamwish';
 import { vidCloudScraper } from './embeds/vidcloud';
 import {
   VidsrcsuServer10Scraper,
@@ -82,6 +83,7 @@ import { oneServerScraper } from './sources/1server';
 import { EightStreamScraper } from './sources/8stream';
 import { coitusScraper } from './sources/coitus';
 import { ConsumetScraper } from './sources/consumet';
+import { cuevana3Scraper } from './sources/cuevana3';
 import { embedsuScraper } from './sources/embedsu';
 import { FedAPIScraper } from './sources/fedapi';
 import { hdRezkaScraper } from './sources/hdrezka';
@@ -102,6 +104,7 @@ import { xprimeScraper } from './sources/xprime';
 export function gatherAllSources(): Array<Sourcerer> {
   // all sources are gathered here
   return [
+    cuevana3Scraper,
     catflixScraper,
     ridooMoviesScraper,
     hdRezkaScraper,
@@ -199,5 +202,8 @@ export function gatherAllEmbeds(): Array<Embed> {
     oneServerHianimeEmbed,
     oneServerAnimepaheEmbed,
     oneServerAnizoneEmbed,
+    streamwishLatinoScraper,
+    streamwishSpanishScraper,
+    streamwishEnglishScraper,
   ];
 }

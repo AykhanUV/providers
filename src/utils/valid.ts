@@ -24,6 +24,11 @@ import {
   hianimeHd2DubEmbed,
   hianimeHd2SubEmbed,
 } from '@/providers/embeds/hianime';
+import {
+  streamwishEnglishScraper,
+  streamwishLatinoScraper,
+  streamwishSpanishScraper,
+} from '@/providers/embeds/streamwish';
 import { viperScraper } from '@/providers/embeds/viper';
 import { warezcdnembedMp4Scraper } from '@/providers/embeds/warezcdn/mp4';
 import {
@@ -49,6 +54,9 @@ const SKIP_VALIDATION_CHECK_IDS = [
   // astraScraper.id,
   // orionScraper.id,
   viperScraper.id,
+  streamwishLatinoScraper.id,
+  streamwishSpanishScraper.id,
+  streamwishEnglishScraper.id,
   uiraliveScraper.id,
   embedsuScraper.id,
   FedAPIPrivateScraper.id,
