@@ -95,6 +95,7 @@ export const wecimaScraper = makeSourcerer({
   id: 'wecima',
   name: 'Wecima (Arabic)',
   rank: 100,
+  disabled: true,
   flags: [],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
