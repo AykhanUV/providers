@@ -32,6 +32,7 @@ import {
   xprimeMarantEmbed,
   xprimePrimenetEmbed,
   xprimeStreamboxEmbed,
+  xprimeVolkswagenEmbed,
 } from '@/providers/embeds/xprime';
 import { embedsuScraper } from '@/providers/sources/embedsu';
 import { uiraliveScraper } from '@/providers/sources/uiralive';
@@ -56,6 +57,7 @@ const SKIP_VALIDATION_CHECK_IDS = [
   xprimeStreamboxEmbed.id,
   xprimeMarantEmbed.id,
   xprimePrimenetEmbed.id,
+  xprimeVolkswagenEmbed.id,
   ConsumetVidCloudScraper.id,
   ConsumetStreamSBScraper.id,
   ConsumetVidStreamingScraper.id,

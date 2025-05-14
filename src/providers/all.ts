@@ -76,6 +76,7 @@ import {
   xprimeMarantEmbed,
   xprimePrimenetEmbed,
   xprimeStreamboxEmbed,
+  xprimeVolkswagenEmbed,
 } from './embeds/xprime';
 import { oneServerScraper } from './sources/1server';
 import { EightStreamScraper } from './sources/8stream';
@@ -180,6 +181,7 @@ export function gatherAllEmbeds(): Array<Embed> {
     xprimeStreamboxEmbed,
     xprimeMarantEmbed,
     xprimePrimenetEmbed,
+    xprimeVolkswagenEmbed,
     ConsumetVidCloudScraper,
     ConsumetStreamSBScraper,
     ConsumetVidStreamingScraper,
