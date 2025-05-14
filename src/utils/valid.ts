@@ -36,6 +36,7 @@ import {
 } from '@/providers/embeds/xprime';
 import { embedsuScraper } from '@/providers/sources/embedsu';
 import { uiraliveScraper } from '@/providers/sources/uiralive';
+import { wecimaScraper } from '@/providers/sources/wecima';
 import { Stream } from '@/providers/streams';
 import { IndividualEmbedRunnerOptions } from '@/runners/individualRunner';
 import { ProviderRunnerOptions } from '@/runners/runner';
@@ -75,6 +76,7 @@ const SKIP_VALIDATION_CHECK_IDS = [
   oneServerHianimeEmbed.id,
   oneServerAnimepaheEmbed.id,
   oneServerAnizoneEmbed.id,
+  wecimaScraper.id,
 ];
 
 export function isValidStream(stream: Stream | undefined): boolean {
