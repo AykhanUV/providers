@@ -95,6 +95,7 @@ import { uiraliveScraper } from './sources/uiralive';
 import { vidapiClickScraper } from './sources/vidapiclick';
 import { warezcdnScraper } from './sources/warezcdn';
 import { webtorScraper } from './sources/webtor';
+import { wecimaScraper } from './sources/wecima';
 import { xprimeScraper } from './sources/xprime';
 
 export function gatherAllSources(): Array<Sourcerer> {
@@ -128,6 +129,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     ConsumetScraper,
     hianimeScraper,
     oneServerScraper,
+    wecimaScraper,
   ];
 }
 
