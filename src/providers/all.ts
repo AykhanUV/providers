@@ -74,6 +74,7 @@ import { webtor1080Scraper, webtor480Scraper, webtor4kScraper, webtor720Scraper 
 import {
   xprimeApolloEmbed,
   xprimeFoxEmbed,
+  xprimeHarbourEmbed,
   xprimeMarantEmbed,
   xprimePrimenetEmbed,
   xprimeStreamboxEmbed,
@@ -185,6 +186,7 @@ export function gatherAllEmbeds(): Array<Embed> {
     xprimeMarantEmbed,
     xprimePrimenetEmbed,
     xprimeVolkswagenEmbed,
+    xprimeHarbourEmbed,
     ConsumetVidCloudScraper,
     ConsumetStreamSBScraper,
     ConsumetVidStreamingScraper,
