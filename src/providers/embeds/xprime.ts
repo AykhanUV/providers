@@ -270,6 +270,8 @@ export const xprimeVolkswagenEmbed = makeEmbed({
 
     if (query.type === 'show') {
       url += `&season=${query.season}&episode=${query.episode}`;
+    } else {
+      url += `&year=${query.releaseYear}`;
     }
 
     const data = await ctx.fetcher(url);
