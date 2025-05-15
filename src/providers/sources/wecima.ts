@@ -33,7 +33,6 @@ async function getTvEpisodePageUrl(ctx: ShowScrapeContext, seriesPageUrl: string
   const seriesHtml = await ctx.proxiedFetcher<string>(seriesPageUrl);
   const series$ = load(seriesHtml);
 
-  // Find season link
   let seasonUrl: string | undefined;
   series$('.List--Seasons--Episodes a').each((_, el) => {
     const linkText = series$(el).text().trim();
@@ -49,7 +48,6 @@ async function getTvEpisodePageUrl(ctx: ShowScrapeContext, seriesPageUrl: string
   const seasonHtml = await ctx.proxiedFetcher<string>(seasonUrl);
   const season$ = load(seasonHtml);
 
-  // Find episode link
   let episodeUrl: string | undefined;
   season$('.Episodes--Seasons--Episodes a').each((_, el) => {
     const episodeTitle = season$(el).find('episodetitle').text().trim();
@@ -65,7 +63,6 @@ async function getTvEpisodePageUrl(ctx: ShowScrapeContext, seriesPageUrl: string
 }
 
 const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Promise<SourcererOutput> => {
-  // Assuming ctx.media.title is the English title provided by the main application
   const titleToSearch = ctx.media.title;
   if (!titleToSearch) throw new NotFoundError('Media title is required for this source');
 
@@ -74,10 +71,14 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
   if (!contentRootUrl) throw new NotFoundError(`No Wecima search results for: ${titleToSearch}`);
   ctx.progress(30);
 
-  let contentPageUrl = contentRootUrl;
+  let contentPageUrl: string;
+
   if (ctx.media.type === 'show') {
-    contentPageUrl = await getTvEpisodePageUrl(ctx, contentRootUrl);
-    if (!contentPageUrl) throw new NotFoundError('TV episode page URL not found');
+    const episodePageUrl = await getTvEpisodePageUrl(ctx, contentRootUrl as string);
+    if (!episodePageUrl) throw new NotFoundError('TV episode page URL not found');
+    contentPageUrl = episodePageUrl;
+  } else {
+    contentPageUrl = contentRootUrl as string;
   }
   ctx.progress(50);
 
