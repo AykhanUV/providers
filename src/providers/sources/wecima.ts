@@ -74,7 +74,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
   let contentPageUrl: string;
 
   if (ctx.media.type === 'show') {
-    const episodePageUrl = await getTvEpisodePageUrl(ctx, contentRootUrl as string);
+    const episodePageUrl = await getTvEpisodePageUrl(ctx as ShowScrapeContext, contentRootUrl as string);
     if (!episodePageUrl) throw new NotFoundError('TV episode page URL not found');
     contentPageUrl = episodePageUrl;
   } else {
