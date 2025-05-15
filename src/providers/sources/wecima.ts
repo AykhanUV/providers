@@ -1,92 +1,72 @@
 import { load } from 'cheerio';
 
-import { flags } from '@/entrypoint/utils/targets';
 import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 
 const baseUrl = 'https://wecima.tube';
 
-async function searchWecima(ctx: MovieScrapeContext | ShowScrapeContext, titleToSearch: string): Promise<string | null> {
-  const searchUrl = `${baseUrl}/search/${encodeURIComponent(titleToSearch)}/`;
-  const html = await ctx.proxiedFetcher<string>(searchUrl);
-  const $ = load(html);
-  const firstResultLink = $('.Grid--WecimaPosts .GridItem a').first().attr('href');
-  return firstResultLink ? `${baseUrl}${firstResultLink}` : null;
-}
-
-async function getEmbedUrlFromContentPage(ctx: MovieScrapeContext | ShowScrapeContext, contentPageUrl: string): Promise<string | null> {
-  const html = await ctx.proxiedFetcher<string>(contentPageUrl);
-  const $ = load(html);
-  const embedUrl = $('meta[itemprop="embedURL"]').attr('content');
-  return embedUrl ?? null;
-}
-
-async function getFinalVideoUrlFromEmbedPage(ctx: MovieScrapeContext | ShowScrapeContext, embedUrl: string): Promise<string | null> {
-  const html = await ctx.proxiedFetcher<string>(embedUrl);
-  const $ = load(html);
-  const videoSourceUrl = $('source[type="video/mp4"]').attr('src');
-  return videoSourceUrl ?? null;
-}
-
-async function getTvEpisodePageUrl(ctx: ShowScrapeContext, seriesPageUrl: string): Promise<string | null> {
-  const seriesHtml = await ctx.proxiedFetcher<string>(seriesPageUrl);
-  const series$ = load(seriesHtml);
-
-  // Find season link
-  let seasonUrl: string | undefined;
-  series$('.List--Seasons--Episodes a').each((_, el) => {
-    const linkText = series$(el).text().trim();
-    if (linkText.includes(`موسم ${ctx.media.season.number}`)) {
-      seasonUrl = series$(el).attr('href');
-      return false;
-    }
+async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promise<SourcererOutput> {
+  const searchPage = await ctx.proxiedFetcher(`/search/${encodeURIComponent(ctx.media.title)}/`, {
+    baseUrl,
   });
-  if (!seasonUrl) throw new NotFoundError(`Season ${ctx.media.season.number} not found on Wecima`);
-  if (!seasonUrl.startsWith('http')) seasonUrl = `${baseUrl}${seasonUrl}`;
 
+  const search$ = load(searchPage);
+  const firstResult = search$('.Grid--WecimaPosts .GridItem a').first();
+  if (!firstResult.length) throw new NotFoundError('No results found');
 
-  const seasonHtml = await ctx.proxiedFetcher<string>(seasonUrl);
-  const season$ = load(seasonHtml);
-
-  // Find episode link
-  let episodeUrl: string | undefined;
-  season$('.Episodes--Seasons--Episodes a').each((_, el) => {
-    const episodeTitle = season$(el).find('episodetitle').text().trim();
-    if (episodeTitle === `الحلقة ${ctx.media.episode.number}`) {
-      episodeUrl = season$(el).attr('href');
-      return false;
-    }
-  });
-  if (!episodeUrl) throw new NotFoundError(`Episode ${ctx.media.episode.number} for season ${ctx.media.season.number} not found on Wecima`);
-  if (!episodeUrl.startsWith('http')) episodeUrl = `${baseUrl}${episodeUrl}`;
-
-  return episodeUrl;
-}
-
-const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Promise<SourcererOutput> => {
-  // Assuming ctx.media.title is the English title provided by the main application
-  const titleToSearch = ctx.media.title;
-  if (!titleToSearch) throw new NotFoundError('Media title is required for this source');
-
-  ctx.progress(10);
-  const contentRootUrl = await searchWecima(ctx, titleToSearch);
-  if (!contentRootUrl) throw new NotFoundError(`No Wecima search results for: ${titleToSearch}`);
+  const contentUrl = firstResult.attr('href');
+  if (!contentUrl) throw new NotFoundError('No content URL found');
   ctx.progress(30);
 
-  let contentPageUrl = contentRootUrl;
-  if (ctx.media.type === 'show') {
-    contentPageUrl = await getTvEpisodePageUrl(ctx, contentRootUrl);
-    if (!contentPageUrl) throw new NotFoundError('TV episode page URL not found');
+  const contentPage = await ctx.proxiedFetcher(contentUrl, { baseUrl });
+  const content$ = load(contentPage);
+
+  let embedUrl: string | undefined;
+
+  if (ctx.media.type === 'movie') {
+    embedUrl = content$('meta[itemprop="embedURL"]').attr('content');
+  } else {
+    const seasonLinks = content$('.List--Seasons--Episodes a');
+    let seasonUrl: string | undefined;
+
+    for (const element of seasonLinks) {
+      const text = content$(element).text().trim();
+      if (text.includes(`موسم ${ctx.media.season}`)) {
+        seasonUrl = content$(element).attr('href');
+        break;
+      }
+    }
+
+    if (!seasonUrl) throw new NotFoundError(`Season ${ctx.media.season} not found`);
+
+    const seasonPage = await ctx.proxiedFetcher(seasonUrl, { baseUrl });
+    const season$ = load(seasonPage);
+
+    const episodeLinks = season$('.Episodes--Seasons--Episodes a');
+    for (const element of episodeLinks) {
+      const epTitle = season$(element).find('episodetitle').text().trim();
+      if (epTitle === `الحلقة ${ctx.media.episode}`) {
+        const episodeUrl = season$(element).attr('href');
+        if (episodeUrl) {
+          const episodePage = await ctx.proxiedFetcher(episodeUrl, { baseUrl });
+          const episode$ = load(episodePage);
+          embedUrl = episode$('meta[itemprop="embedURL"]').attr('content');
+        }
+        break;
+      }
+    }
   }
-  ctx.progress(50);
 
-  const embedUrl = await getEmbedUrlFromContentPage(ctx, contentPageUrl);
-  if (!embedUrl) throw new NotFoundError('Embed URL not found on content page');
-  ctx.progress(70);
+  if (!embedUrl) throw new NotFoundError('No embed URL found');
+  ctx.progress(60);
 
-  const finalVideoUrl = await getFinalVideoUrlFromEmbedPage(ctx, embedUrl);
-  if (!finalVideoUrl) throw new NotFoundError('Final video URL not found from embed page');
+  // Get the final video URL
+  const embedPage = await ctx.proxiedFetcher(embedUrl);
+  const embed$ = load(embedPage);
+  const videoSource = embed$('source[type="video/mp4"]').attr('src');
+
+  if (!videoSource) throw new NotFoundError('No video source found');
   ctx.progress(90);
 
   return {
@@ -95,28 +75,28 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
       {
         id: 'primary',
         type: 'file',
-        flags: [flags.CORS_ALLOWED],
+        flags: [],
+        headers: {
+          referer: baseUrl,
+        },
         qualities: {
           unknown: {
             type: 'mp4',
-            url: finalVideoUrl,
+            url: videoSource,
           },
         },
         captions: [],
-        headers: {
-          Referer: baseUrl,
-        },
       },
     ],
   };
-};
+}
 
 export const wecimaScraper = makeSourcerer({
   id: 'wecima',
-  name: 'Wecima',
+  name: 'Wecima (Arabic)',
   rank: 100,
-  disabled: false,
-  flags: [flags.CORS_ALLOWED],
-  scrapeMovie: universalScraper,
-  scrapeShow: universalScraper,
+  disabled: true,
+  flags: [],
+  scrapeMovie: comboScraper,
+  scrapeShow: comboScraper,
 });
