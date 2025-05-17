@@ -32,14 +32,17 @@ function embed(provider: { id: string; name: string; rank: number }) {
       const encodedUrl = encodeURIComponent(ctx.url);
       const apiUrl = `https://ws-m3u8.moonpic.qzz.io/m3u8/${encodedUrl}`;
 
-      const response = await ctx.proxiedFetcher<{ m3u8: string }>(apiUrl, {
+      const response = await fetch(apiUrl, {
         headers: {
           Accept: 'application/json',
           // 'ngrok-skip-browser-warning': 'true', // this header bypass ngrok warning
         },
       });
 
-      const videoUrl = response.m3u8;
+      if (!response.ok) throw new NotFoundError('No video URL found');
+      const data = await response.json();
+
+      const videoUrl = data.m3u8;
       if (!videoUrl) throw new NotFoundError('No video URL found');
 
       return {
