@@ -5,6 +5,11 @@ import { NotFoundError } from '@/utils/errors';
 
 const providers = [
   {
+    id: 'streamwish-japanese',
+    name: 'StreamWish (Japones Sub Español)',
+    rank: 171,
+  },
+  {
     id: 'streamwish-latino',
     name: 'StreamWish (Latino)',
     rank: 170,
@@ -58,4 +63,5 @@ function embed(provider: { id: string; name: string; rank: number }) {
   });
 }
 
-export const [streamwishLatinoScraper, streamwishSpanishScraper, streamwishEnglishScraper] = providers.map(embed);
+export const [streamwishJapaneseScraper, streamwishLatinoScraper, streamwishSpanishScraper, streamwishEnglishScraper] =
+  providers.map(embed);
