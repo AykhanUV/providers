@@ -27,12 +27,10 @@ function embed(provider: { id: string; name: string; rank: number }) {
     name: provider.name,
     rank: provider.rank,
     async scrape(ctx) {
-      console.log('Starting scrape for StreamWish with URL:', ctx.url);
-
       const encodedUrl = encodeURIComponent(ctx.url);
       const apiUrl = `https://ws-m3u8.moonpic.qzz.io/m3u8/${encodedUrl}`;
 
-      const response = await fetch(apiUrl, {
+      const response = await fetcher(apiUrl, {
         headers: {
           Accept: 'application/json',
           // 'ngrok-skip-browser-warning': 'true', // this header bypass ngrok warning
