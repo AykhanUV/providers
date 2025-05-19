@@ -30,7 +30,7 @@ function embed(provider: { id: string; name: string; rank: number }) {
       const encodedUrl = encodeURIComponent(ctx.url);
       const apiUrl = `https://ws-m3u8.moonpic.qzz.io/m3u8/${encodedUrl}`;
 
-      const response = await fetcher(apiUrl, {
+      const response = await fetch(apiUrl, {
         headers: {
           Accept: 'application/json',
           // 'ngrok-skip-browser-warning': 'true', // this header bypass ngrok warning
