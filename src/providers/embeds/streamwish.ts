@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import { flags } from '@/entrypoint/utils/targets';
 import { makeEmbed } from '@/providers/base';
 import { NotFoundError } from '@/utils/errors';
@@ -42,9 +41,7 @@ function embed(provider: { id: string; name: string; rank: number }) {
         },
       });
 
-      if (!response.ok) throw new NotFoundError('No video URL found');
-      const data = await response.json();
-
+      const data: { m3u8: string } = await response.json();
       const videoUrl = data.m3u8;
       if (!videoUrl) throw new NotFoundError('No video URL found');
 

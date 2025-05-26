@@ -8,7 +8,7 @@ const apolloBaseUrl = 'https://cors.aether.mom/?destination=https://kendrickl-3a
 const showboxBaseUrl = 'https://cors.aether.mom/?destination=https://xprime.tv/primebox';
 const marantBaseUrl = 'https://cors.aether.mom/?destination=https://backend.xprime.tv/marant';
 const primenetBaseUrl = 'https://cors.aether.mom/?destination=https://backend.xprime.tv/primenet';
-const volkswagenBaseUrl = 'https://cors.aether.mom/?destination=https://backend.xprime.tv/volkswagen';
+const volkswagenBaseUrl = 'https://backend.xprime.tv/volkswagen';
 const harbourBaseUrl = 'https://backend.xprime.tv/harbour';
 
 const languageMap: Record<string, string> = {
@@ -34,12 +34,42 @@ const languageMap: Record<string, string> = {
   'spanish - european': 'es',
   'spanish - latin american': 'es',
   swedish: 'sv',
-  turkish: 'tr', 
+  turkish: 'tr',
   اَلْعَرَبِيَّةُ: 'ar',
   বাংলা: 'bn',
   filipino: 'tl',
   indonesia: 'id',
   اردو: 'ur',
+  English: 'en',
+  Arabic: 'ar',
+  Bosnian: 'bs',
+  Bulgarian: 'bg',
+  Croatian: 'hr',
+  Czech: 'cs',
+  Danish: 'da',
+  Dutch: 'nl',
+  Estonian: 'et',
+  Finnish: 'fi',
+  French: 'fr',
+  German: 'de',
+  Greek: 'el',
+  Hebrew: 'he',
+  Hungarian: 'hu',
+  Indonesian: 'id',
+  Italian: 'it',
+  Norwegian: 'no',
+  Persian: 'fa',
+  Polish: 'pl',
+  Portuguese: 'pt',
+  'Protuguese (BR)': 'pt-br',
+  Romanian: 'ro',
+  Russian: 'ru',
+  Serbian: 'sr',
+  Slovenian: 'sl',
+  Spanish: 'es',
+  Swedish: 'sv',
+  Thai: 'th',
+  Turkish: 'tr',
 };
 
 export const xprimeApolloEmbed = makeEmbed({
@@ -54,13 +84,7 @@ export const xprimeApolloEmbed = makeEmbed({
       url += `/${query.season}/${query.episode}`;
     }
 
-    const data = await ctx.proxiedFetcher(url, {
-      baseUrl: apolloBaseUrl,
-      headers: {
-        Referer: `https://pstream.org`,
-        Origin: `https://pstream.org`,
-      },
-    });
+    const data = await ctx.fetcher(url);
 
     if (!data) throw new NotFoundError('No response received');
     if (data.error) throw new NotFoundError(data.error);
@@ -80,9 +104,17 @@ export const xprimeApolloEmbed = makeEmbed({
         {
           type: 'hls',
           id: 'primary',
-          playlist: `https://proxy.fifthwit.net/m3u8-proxy?url=${encodeURIComponent(data.url)}&headers=${encodeURIComponent(JSON.stringify({ referer: 'https://pstream.org/', origin: 'https://pstream.org' }))}`,
+          playlist: data.url,
           flags: [flags.CORS_ALLOWED],
           captions,
+          ...(data.thumbnails?.file
+            ? {
+                thumbnailTrack: {
+                  type: 'vtt',
+                  url: data.thumbnails.file,
+                },
+              }
+            : {}),
         },
       ],
     };
@@ -151,6 +183,7 @@ export const xprimePrimenetEmbed = makeEmbed({
   id: 'xprime-primenet',
   name: 'Primenet',
   rank: 235,
+  disabled: true,
   async scrape(ctx): Promise<EmbedOutput> {
     const query = JSON.parse(ctx.url);
     let url = `${primenetBaseUrl}?id=${query.tmdbId}`;
@@ -176,6 +209,67 @@ export const xprimePrimenetEmbed = makeEmbed({
           flags: [flags.CORS_ALLOWED],
           captions: [],
         },
+      ],
+    };
+  },
+});
+
+export const xprimePhoenixEmbed = makeEmbed({
+  id: 'xprime-phoenix',
+  name: 'Phoenix',
+  rank: 234,
+  disabled: true,
+  async scrape(ctx): Promise<EmbedOutput> {
+    const query = JSON.parse(ctx.url);
+
+    const params = new URLSearchParams();
+    params.append('id', query.tmdbId);
+    params.append('imdb', query.imdbId);
+
+    // For TV shows, add season and episode
+    if (query.type === 'show') {
+      params.append('season', query.season.toString());
+      params.append('episode', query.episode.toString());
+    }
+
+    const url = `https://backend.xprime.tv/phoenix?${params.toString()}`;
+    ctx.progress(50);
+
+    const data = await ctx.fetcher(url);
+
+    if (!data) throw new NotFoundError('No response received');
+    if (data.error) throw new NotFoundError(data.error);
+    if (!data.url) throw new NotFoundError('No stream URL found in response');
+
+    ctx.progress(90);
+
+    // Parse and format captions
+    const captions = data.subtitles
+      ? data.subtitles.map((sub: any) => {
+          // Extract the base label without number suffixes
+          const baseLabel = sub.label.split(' ')[0];
+          // Use mapped ISO code or the original label if not found in the map
+          const langCode = languageMap[baseLabel] || baseLabel.toLowerCase().substring(0, 2);
+
+          return {
+            id: `${sub.label.replace(/\s+/g, '_').toLowerCase()}`,
+            language: langCode,
+            url: sub.file,
+            label: sub.label,
+            type: 'vtt',
+          };
+        })
+      : [];
+
+    return {
+      stream: [
+      {
+        type: 'hls',
+        id: 'primary',
+        playlist: data.url.replace('https://oca.kendrickl-3amar.site/?v=', 'https://proxy2.pstream.org/m3u8-proxy?url='),
+        flags: [flags.CORS_ALLOWED],
+        captions,
+      },
       ],
     };
   },
@@ -216,7 +310,7 @@ export const xprimeFoxEmbed = makeEmbed({
         {
           type: 'hls',
           id: 'primary',
-          playlist: `https://oca.kendrickl-3amar.site/?v=${encodeURIComponent(data.url)}&headers=${encodeURIComponent(JSON.stringify({ referer: 'https://megacloud.store/', origin: 'https://megacloud.store' }))}`,
+          playlist: `https://proxy2.pstream.org/m3u8-proxy?url=${encodeURIComponent(data.url)}&headers=${encodeURIComponent(JSON.stringify({ referer: 'https://megacloud.store/', origin: 'https://megacloud.store' }))}`,
           flags: [flags.CORS_ALLOWED],
           captions,
         },
@@ -260,7 +354,7 @@ export const xprimeHarbourEmbed = makeEmbed({
         {
           type: 'hls',
           id: 'primary',
-          playlist: data.url,
+          playlist: data.url.replace('https://oca.kendrickl-3amar.site/?v=', 'https://proxy2.pstream.org/m3u8-proxy?url='),
           flags: [flags.CORS_ALLOWED],
           captions,
         },
@@ -294,7 +388,7 @@ export const xprimeMarantEmbed = makeEmbed({
         {
           type: 'hls',
           id: 'primary',
-          playlist: data.url,
+          playlist: `https://proxy2.pstream.org/m3u8-proxy?url=${encodeURIComponent(data.url)}&headers=${encodeURIComponent(JSON.stringify({ referer: 'https://pstream.org/', origin: 'https://pstream.org' }))}`,
           flags: [flags.CORS_ALLOWED],
           captions: [],
         },
