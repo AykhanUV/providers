@@ -34,6 +34,7 @@ import { viperScraper } from '@/providers/embeds/viper';
 import { warezcdnembedMp4Scraper } from '@/providers/embeds/warezcdn/mp4';
 import {
   xprimeApolloEmbed,
+  xprimeFendiEmbed,
   xprimeFoxEmbed,
   xprimeHarbourEmbed,
   xprimeMarantEmbed,
@@ -69,6 +70,7 @@ const SKIP_VALIDATION_CHECK_IDS = [
   xprimeApolloEmbed.id,
   xprimeStreamboxEmbed.id,
   xprimeMarantEmbed.id,
+  xprimeFendiEmbed.id,
   xprimePrimenetEmbed.id,
   xprimeVolkswagenEmbed.id,
   xprimeHarbourEmbed.id,

@@ -79,6 +79,7 @@ import { warezPlayerScraper } from './embeds/warezcdn/warezplayer';
 import { webtor1080Scraper, webtor480Scraper, webtor4kScraper, webtor720Scraper } from './embeds/webtor';
 import {
   xprimeApolloEmbed,
+  xprimeFendiEmbed,
   xprimeFoxEmbed,
   xprimeHarbourEmbed,
   xprimeMarantEmbed,
@@ -199,6 +200,7 @@ export function gatherAllEmbeds(): Array<Embed> {
     xprimeApolloEmbed,
     xprimeStreamboxEmbed,
     xprimeMarantEmbed,
+    xprimeFendiEmbed,
     xprimePrimenetEmbed,
     xprimeVolkswagenEmbed,
     xprimeHarbourEmbed,
