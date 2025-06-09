@@ -5,10 +5,10 @@ import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 const getUserToken = (): string | null => {
   try {
     if (typeof window === 'undefined') return null;
-    const authData = window.localStorage.getItem('__MW::auth');
+    const authData = window.localStorage.getItem('__MW::preferences');
     if (!authData) return null;
     const parsedAuth = JSON.parse(authData);
-    return parsedAuth?.state?.febboxToken || null;
+    return parsedAuth?.febboxKey || null;
   } catch (e) {
     console.warn('Unable to access localStorage or parse auth data:', e);
     return null;
