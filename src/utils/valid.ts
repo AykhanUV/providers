@@ -45,6 +45,7 @@ import {
 } from '@/providers/embeds/xprime';
 import { embedsuScraper } from '@/providers/sources/embedsu';
 import { soaperTvScraper } from '@/providers/sources/soapertv';
+import { uiraliveScraper } from '@/providers/sources/uiralive';
 import { vidsrcScraper } from '@/providers/sources/vidsrc';
 import { wecimaScraper } from '@/providers/sources/wecima';
 import { Stream } from '@/providers/streams';
