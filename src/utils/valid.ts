@@ -62,6 +62,7 @@ const SKIP_VALIDATION_CHECK_IDS = [
   streamwishLatinoScraper.id,
   streamwishSpanishScraper.id,
   streamwishEnglishScraper.id,
+  uiraliveScraper.id,
   embedsuScraper.id,
   FedAPIPrivateScraper.id,
   FedDBScraper.id,

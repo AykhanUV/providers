@@ -108,6 +108,7 @@ import { ridooMoviesScraper } from './sources/ridomovies';
 import { slidemoviesScraper } from './sources/slidemovies';
 import { soaperTvScraper } from './sources/soapertv';
 import { streamboxScraper } from './sources/streambox';
+import { uiraliveScraper } from './sources/uiralive';
 import { vidapiClickScraper } from './sources/vidapiclick';
 import { warezcdnScraper } from './sources/warezcdn';
 import { webtorScraper } from './sources/webtor';
@@ -137,6 +138,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     slidemoviesScraper,
     iosmirrorScraper,
     iosmirrorPVScraper,
+    uiraliveScraper,
     vidapiClickScraper,
     coitusScraper,
     streamboxScraper,
