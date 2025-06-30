@@ -38,68 +38,88 @@ function parseSubtitleLinks(inputString?: string | boolean): FileBasedStream['ca
   return captions;
 }
 
-function decodeStream(encoded: string): Record<string, string> {
-  const replacements = {
-    '#': 'o',
-    '!': 'p',
-    '@': 'a',
-    $: 's',
-    '%': 't',
-    '^': 'e',
-    '&': 'h',
-    '*': 'r',
-    '(': 'u',
-    ')': 'n',
-    '_': 'd',
-    '+': 'l',
-    '|': 'c',
-  };
-
-  const trash = ['//_//', '$$', '^^^', '###', '@@@'];
-
-  let decoded = encoded;
-  for (const [key, value] of Object.entries(replacements)) {
-    decoded = decoded.replace(new RegExp(`\\${key}`, 'g'), value);
-  }
-
-  for (const t of trash) {
-    decoded = decoded.replace(new RegExp(t, 'g'), '');
-  }
-
-  try {
-    decoded = atob(decoded);
-  } catch (e) {
-    throw new Error('Failed to decode base64 string');
-  }
-
-  return decoded.split(',').reduce((acc, part) => {
-    const [quality, url] = part.split(']');
-    if (quality && url) {
-      acc[quality.substring(1)] = url;
-    }
-    return acc;
-  }, {} as Record<string, string>);
-}
+// function getData(x: string): Record<string, string> {
+//   const v: Record<string, string> = {
+//     file3_separator: '//_//',
+//     bk0: '$$#!!@#!@##',
+//     bk1: '^^^!@##!!##',
+//     bk2: '####^!!##!@@',
+//     bk3: '@@@@@!##!^^^',
+//     bk4: '$$!!@$$@^!@#$$@',
+//   };
+//   let a = x.substr(2);
+//   for (let i = 4; i >= 0; i--) {
+//     const key = `bk${i}`;
+//     if (v[key]) {
+//       a = a.replace(
+//         v.file3_separator +
+//           Buffer.from(
+//             encodeURIComponent(v[key]).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16))),
+//           ).toString('base64'),
+//         '',
+//       );
+//     }
+//   }
+//   try {
+//     a = decodeURIComponent(
+//       Buffer.from(a, 'base64')
+//         .toString()
+//         .split('')
+//         .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
+//         .join(''),
+//     );
+//   } catch (e) {
+//     a = '';
+//   }
+//   return a.split(',').reduce(
+//     (m, ele) => {
+//       const [key, value] = ele.split(']');
+//       m[key.replace('[', '')] = value;
+//       return m;
+//     },
+//     {} as Record<string, string>,
+//   );
+// }
 
 function parseVideoLinks(inputString?: string): FileBasedStream['qualities'] {
   if (!inputString) throw new NotFoundError('No video links found');
 
   try {
-    const qualities = decodeStream(inputString);
-    const result: FileBasedStream['qualities'] = {};
+    const qualityMap: Record<string, { type: 'mp4'; url: string }> = {};
+    const links = inputString.split(',');
 
-    for (const [quality, url] of Object.entries(qualities)) {
-      if (url === 'null') continue;
-      const validQuality = getValidQualityFromString(quality.replace('p', ''));
-      result[validQuality] = {
-        type: 'mp4',
-        url: url.trim(),
-      };
-    }
+    links.forEach((link) => {
+      const match = link.match(/\[([^\]]+)\](https?:\/\/[^\s,]+)/);
+      if (match) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+        const [_, quality, url] = match;
+        // Skip premium qualities that are null
+        if (url === 'null') return;
+
+        // Normalize quality (remove HTML tags and convert to lowercase)
+        const normalizedQuality = quality
+          .replace(/<[^>]+>/g, '') // Remove HTML tags
+          .toLowerCase()
+          .replace('p', '')
+          .trim();
+
+        qualityMap[normalizedQuality] = {
+          type: 'mp4',
+          url: url.trim(),
+        };
+      }
+    });
+
+    // Convert to the expected format
+    const result: FileBasedStream['qualities'] = {};
+    Object.entries(qualityMap).forEach(([quality, data]) => {
+      const validQuality = getValidQualityFromString(quality);
+      result[validQuality] = data;
+    });
 
     return result;
   } catch (error) {
-    if (error instanceof Error) throw new NotFoundError(error.message);
+    console.error('Error parsing video links:', error);
     throw new NotFoundError('Failed to parse video links');
   }
 }
@@ -116,4 +136,4 @@ function extractTitleAndYear(input: string) {
   return null;
 }
 
-export { extractTitleAndYear, parseSubtitleLinks, parseVideoLinks, generateRandomFavs, decodeStream };
+export { extractTitleAndYear, parseSubtitleLinks, parseVideoLinks, generateRandomFavs };
