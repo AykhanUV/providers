@@ -210,19 +210,12 @@ export const mirza = (encodedUrl: string, v: any): string => {
   let a = encodedUrl.substring(2);
   for (let i = 4; i >= 0; i--) {
     if (v[`bk${i}`]) {
-      const b1 = (str: string) =>
-        btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (_, p1) => String.fromCharCode(parseInt(p1, 16))));
+      const b1 = (str: string) => salt.e(str);
       a = a.replace(v.file3_separator + b1(v[`bk${i}`]), '');
     }
   }
 
-  const b2 = (str: string) =>
-    decodeURIComponent(
-      atob(str)
-        .split('')
-        .map((c) => `%${`00${c.charCodeAt(0).toString(16)}`.slice(-2)}`)
-        .join(''),
-    );
+  const b2 = (str: string) => salt.d(str);
 
   return b2(a);
 };
