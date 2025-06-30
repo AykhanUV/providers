@@ -1,3 +1,5 @@
+import AbortController from 'abort-controller';
+
 import { makeFullUrl } from '@/fetchers/common';
 import { FetchLike } from '@/fetchers/fetch';
 import { makeStandardFetcher } from '@/fetchers/standardFetch';
