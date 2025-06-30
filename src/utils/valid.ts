@@ -45,7 +45,7 @@ import {
 } from '@/providers/embeds/xprime';
 import { embedsuScraper } from '@/providers/sources/embedsu';
 import { soaperTvScraper } from '@/providers/sources/soapertv';
-import { vidsrcScraper } from '@/providers/sources/vidsrc';
+import { uiraliveScraper } from '@/providers/sources/uiralive';
 import { wecimaScraper } from '@/providers/sources/wecima';
 import { Stream } from '@/providers/streams';
 import { IndividualEmbedRunnerOptions } from '@/runners/individualRunner';
@@ -95,7 +95,6 @@ const SKIP_VALIDATION_CHECK_IDS = [
   wecimaScraper.id,
   ...cinemaosHexaEmbeds.map((e) => e.id),
   soaperTvScraper.id,
-  vidsrcScraper.id,
 ];
 
 export function isValidStream(stream: Stream | undefined): boolean {
