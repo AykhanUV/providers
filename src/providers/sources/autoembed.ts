@@ -1,4 +1,6 @@
 /* eslint-disable no-console */
+import { load } from 'cheerio';
+
 import { flags } from '@/entrypoint/utils/targets';
 import { SourcererEmbed, SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
@@ -21,12 +23,17 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   });
 
   if (!data) throw new NotFoundError('Failed to fetch video source');
+
+  const $ = load(data);
+  const iframeSrc = $('iframe').attr('src');
+  if (!iframeSrc) throw new NotFoundError('Failed to find iframe src');
+
   ctx.progress(50);
 
   const embeds: SourcererEmbed[] = [
     {
       embedId: `autoembed-english`,
-      url: data.videoSource,
+      url: iframeSrc,
     },
   ];
 
