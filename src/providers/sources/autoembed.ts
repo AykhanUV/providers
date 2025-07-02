@@ -4,31 +4,23 @@ import { SourcererEmbed, SourcererOutput, makeSourcerer } from '@/providers/base
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 
-const apiUrl = 'https://tom.autoembed.cc';
-// const baseUrl = 'https://watch.autoembed.cc';
+const baseUrl = 'https://autoembed.pro';
 
 async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promise<SourcererOutput> {
   const mediaType = ctx.media.type === 'show' ? 'tv' : 'movie';
-  let id = ctx.media.tmdbId;
+  let url = `${baseUrl}/embed/${mediaType}/${ctx.media.tmdbId}`;
 
   if (ctx.media.type === 'show') {
-    id = `${id}/${ctx.media.season.number}/${ctx.media.episode.number}`;
+    url = `${url}/${ctx.media.season.number}/${ctx.media.episode.number}`;
   }
 
-  const data = await ctx.proxiedFetcher(`/api/getVideoSource`, {
-    baseUrl: apiUrl,
-    query: {
-      type: mediaType,
-      id,
-    },
+  const data = await ctx.proxiedFetcher<any>(url, {
     headers: {
-      Referer: apiUrl,
-      Origin: apiUrl,
+      Referer: baseUrl,
     },
   });
 
   if (!data) throw new NotFoundError('Failed to fetch video source');
-  if (!data.videoSource) throw new NotFoundError('No video source found');
   ctx.progress(50);
 
   const embeds: SourcererEmbed[] = [
