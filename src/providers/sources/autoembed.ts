@@ -1,32 +1,9 @@
-/* eslint-disable no-console */
-import { load } from 'cheerio';
-
 import { flags } from '@/entrypoint/utils/targets';
 import { SourcererEmbed, SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 
 const baseUrl = 'https://autoembed.pro';
-
-// Custom atob function from embedsu
-async function stringAtob(input: string): Promise<string> {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-  const str = input.replace(/=+$/, '');
-  let output = '';
-  if (str.length % 4 === 1) {
-    throw new Error('The string to be decoded is not correctly encoded.');
-  }
-  for (let bc = 0, bs = 0, i = 0; i < str.length; i++) {
-    const buffer = str.charAt(i);
-    const charIndex = chars.indexOf(buffer);
-    if (charIndex === -1) continue;
-    bs = bc % 4 ? bs * 64 + charIndex : charIndex;
-    if (bc++ % 4) {
-      output += String.fromCharCode(255 & (bs >> ((-2 * bc) & 6)));
-    }
-  }
-  return output;
-}
 
 async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promise<SourcererOutput> {
   const mediaType = ctx.media.type === 'show' ? 'tv' : 'movie';
@@ -36,7 +13,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     url = `${url}/${ctx.media.season.number}/${ctx.media.episode.number}`;
   }
 
-  const data = await ctx.proxiedFetcher<any>(url, {
+  const data = await ctx.proxiedFetcher<string>(url, {
     headers: {
       Referer: baseUrl,
     },
@@ -44,32 +21,21 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 
   if (!data) throw new NotFoundError('Failed to fetch video source');
 
-  const $ = load(data);
-  let iframeSrc = $('iframe').attr('src');
+  const sourcesMatch = data.match(/window\.sourceEntries\s*=\s*(\[.*?\]);/);
+  if (!sourcesMatch?.[1]) throw new NotFoundError('Failed to find source entries');
 
-  if (!iframeSrc) {
-    const vConfigMatch = data.match(/window\.vConfig\s*=\s*JSON\.parse\(atob\(`([^`]+)/i);
-    const encodedConfig = vConfigMatch?.[1];
-    if (encodedConfig) {
-      const decodedConfig = JSON.parse(await stringAtob(encodedConfig));
-      if (decodedConfig?.url) {
-        iframeSrc = decodedConfig.url;
-      }
-    }
-  }
+  const sources = JSON.parse(sourcesMatch[1]) as Array<{ url: string; language?: string; name?: string }>;
+  if (!sources) throw new NotFoundError('Failed to parse source entries');
 
-  if (!iframeSrc) throw new NotFoundError('Failed to find iframe src');
-
-  ctx.progress(50);
-
-  const embeds: SourcererEmbed[] = [
-    {
-      embedId: `autoembed-english`,
-      url: iframeSrc,
-    },
-  ];
-
-  ctx.progress(90);
+  const embeds: SourcererEmbed[] = sources
+    .filter((s) => s.url)
+    .map((source) => {
+      const language = (source.language || source.name || 'English').toLowerCase();
+      return {
+        embedId: `autoembed-${language.split(' ')[0]}`,
+        url: source.url,
+      };
+    });
 
   return {
     embeds,
