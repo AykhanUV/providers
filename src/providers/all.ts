@@ -145,7 +145,6 @@ export function gatherAllSources(): Array<Sourcerer> {
     cinemaosScraper,
     hollymoviehdScraper,
     oneroomScraper,
-    autoembedScraper,
   ];
 }
 
