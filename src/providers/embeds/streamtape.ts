@@ -1,5 +1,6 @@
 import { flags } from '@/entrypoint/utils/targets';
 import { makeEmbed } from '@/providers/base';
+import { createM3U8ProxyUrl } from '@/utils/proxy';
 
 const providers = [
   {
@@ -38,18 +39,12 @@ function embed(provider: { id: string; name: string; rank: number }) {
         stream: [
           {
             id: 'primary',
-            type: 'file',
+            type: 'hls',
+            playlist: createM3U8ProxyUrl(url, {
+              Referer: 'https://streamtape.com',
+            }),
             flags: [flags.CORS_ALLOWED, flags.IP_LOCKED],
             captions: [],
-            qualities: {
-              unknown: {
-                type: 'mp4',
-                url,
-              },
-            },
-            headers: {
-              Referer: 'https://streamtape.com',
-            },
           },
         ],
       };
