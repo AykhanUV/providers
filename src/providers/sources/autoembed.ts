@@ -31,11 +31,9 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     .filter((s) => s.url)
     .map((source) => {
       const language = (source.language || source.name || 'English').toLowerCase();
-      const sourceUrl = new URL(source.url);
-      sourceUrl.searchParams.set('lang', language);
       return {
-        embedId: 'autoembed',
-        url: sourceUrl.toString(),
+        embedId: `autoembed-${language.split(' ')[0]}`,
+        url: source.url,
       };
     });
 

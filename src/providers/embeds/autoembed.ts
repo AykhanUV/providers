@@ -6,11 +6,8 @@ export const autoembedScraper = makeEmbed({
   name: 'Autoembed',
   rank: 550,
   async scrape(ctx) {
-    const url = new URL(ctx.url);
-    const language = url.searchParams.get('lang') || 'english';
-    url.searchParams.delete('lang');
-    const playlistUrl = url.toString();
-
+    const embedId = ctx.url.split('embedId=')[1] || 'autoembed-english';
+    const language = embedId.split('-')[1] || 'English';
     const capitalLang = language.charAt(0).toUpperCase() + language.slice(1);
 
     return {
@@ -18,10 +15,10 @@ export const autoembedScraper = makeEmbed({
         {
           id: 'primary',
           type: 'hls',
-          playlist: playlistUrl,
+          playlist: ctx.url,
           flags: [flags.CORS_ALLOWED],
           captions: [],
-          displayName: capitalLang,
+          displayName: `${capitalLang}`,
         },
       ],
     };
