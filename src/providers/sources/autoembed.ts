@@ -48,12 +48,27 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   let iframeSrc = $('iframe').attr('src');
 
   if (!iframeSrc) {
-    const vConfigMatch = data.match(/window\.vConfig\s*=\s*JSON\.parse\(atob\(`([^`]+)/i);
-    const encodedConfig = vConfigMatch?.[1];
-    if (encodedConfig) {
-      const decodedConfig = JSON.parse(await stringAtob(encodedConfig));
-      if (decodedConfig?.url) {
-        iframeSrc = decodedConfig.url;
+    const configEl = $('#Vconfig').html();
+    if (configEl) {
+      try {
+        const config = JSON.parse(configEl);
+        if (config.url) iframeSrc = config.url;
+      } catch (err) {
+        try {
+          const config = JSON.parse(await stringAtob(configEl));
+          if (config.url) iframeSrc = config.url;
+        } catch (err2) {
+          // In case of error, do nothing
+        }
+      }
+    } else {
+      const vConfigMatch = data.match(/window\.vConfig\s*=\s*JSON\.parse\(atob\(`([^`]+)/i);
+      const encodedConfig = vConfigMatch?.[1];
+      if (encodedConfig) {
+        const decodedConfig = JSON.parse(await stringAtob(encodedConfig));
+        if (decodedConfig?.url) {
+          iframeSrc = decodedConfig.url;
+        }
       }
     }
   }
