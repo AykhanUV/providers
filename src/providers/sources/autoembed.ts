@@ -1,93 +1,50 @@
 /* eslint-disable no-console */
-import { load } from 'cheerio';
-
 import { flags } from '@/entrypoint/utils/targets';
-import { SourcererEmbed, SourcererOutput, makeSourcerer } from '@/providers/base';
+import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 
-const baseUrl = 'https://autoembed.pro';
+const baseUrl = 'https://api2.vidsrc.vip';
 
-// Custom atob function from embedsu
-async function stringAtob(input: string): Promise<string> {
-  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
-  const str = input.replace(/=+$/, '');
-  let output = '';
-  if (str.length % 4 === 1) {
-    throw new Error('The string to be decoded is not correctly encoded.');
-  }
-  for (let bc = 0, bs = 0, i = 0; i < str.length; i++) {
-    const buffer = str.charAt(i);
-    const charIndex = chars.indexOf(buffer);
-    if (charIndex === -1) continue;
-    bs = bc % 4 ? bs * 64 + charIndex : charIndex;
-    if (bc++ % 4) {
-      output += String.fromCharCode(255 & (bs >> ((-2 * bc) & 6)));
-    }
-  }
-  return output;
+// The encoding function from autoembed's hls.js file
+// It's a simple reverse and double base64 encode
+function encodeId(id: string) {
+  return btoa(btoa(id.split('').reverse().join('')));
 }
 
 async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promise<SourcererOutput> {
-  const mediaType = ctx.media.type === 'show' ? 'tv' : 'movie';
-  let url = `${baseUrl}/embed/${mediaType}/${ctx.media.tmdbId}`;
+  const media = ctx.media;
+  let path;
 
-  if (ctx.media.type === 'show') {
-    url = `${url}/${ctx.media.season.number}/${ctx.media.episode.number}`;
+  if (media.type === 'movie') {
+    path = `movie/${media.tmdbId}`;
+  } else {
+    // The API requires the TMDB ID, season, and episode number to be encoded together for shows
+    const tvId = `${media.tmdbId}-${media.season.number}-${media.episode.number}`;
+    path = `tv/${encodeId(tvId)}`;
   }
 
+  const url = `${baseUrl}/${path}`;
   const data = await ctx.proxiedFetcher<any>(url, {
     headers: {
-      Referer: baseUrl,
+      Referer: 'https://autoembed.pro/',
     },
   });
 
-  if (!data) throw new NotFoundError('Failed to fetch video source');
-
-  const $ = load(data);
-  let iframeSrc = $('iframe').attr('src');
-
-  if (!iframeSrc) {
-    const configEl = $('#Vconfig').html();
-    if (configEl) {
-      try {
-        const config = JSON.parse(configEl);
-        if (config.url) iframeSrc = config.url;
-      } catch (err) {
-        try {
-          const config = JSON.parse(await stringAtob(configEl));
-          if (config.url) iframeSrc = config.url;
-        } catch (err2) {
-          // In case of error, do nothing
-        }
-      }
-    } else {
-      const vConfigMatch = data.match(/window\.vConfig\s*=\s*JSON\.parse\(atob\(`([^`]+)/i);
-      const encodedConfig = vConfigMatch?.[1];
-      if (encodedConfig) {
-        const decodedConfig = JSON.parse(await stringAtob(encodedConfig));
-        if (decodedConfig?.url) {
-          iframeSrc = decodedConfig.url;
-        }
-      }
-    }
-  }
-
-  if (!iframeSrc) throw new NotFoundError('Failed to find iframe src');
-
-  ctx.progress(50);
-
-  const embeds: SourcererEmbed[] = [
-    {
-      embedId: `autoembed-english`,
-      url: iframeSrc,
-    },
-  ];
-
-  ctx.progress(90);
+  // The API returns a JSON object with source URLs. We take the first one.
+  const streamUrl = data?.source1;
+  if (!streamUrl) throw new NotFoundError('No stream found');
 
   return {
-    embeds,
+    stream: [
+      {
+        id: 'primary',
+        type: 'hls',
+        playlist: streamUrl,
+        flags: [flags.CORS_ALLOWED],
+        captions: [],
+      },
+    ],
   };
 }
 
