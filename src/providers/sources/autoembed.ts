@@ -36,6 +36,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   if (!streamUrl) throw new NotFoundError('No stream found');
 
   return {
+    embeds: [],
     stream: [
       {
         id: 'primary',
