@@ -4,7 +4,8 @@ import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 
-const baseUrl = 'https://api2.vidsrc.vip';
+const apiBaseUrl = 'https://api2.vidsrc.vip';
+const refererBaseUrl = 'https://autoembed.pro';
 
 // The encoding logic from autoembed's hls.js file.
 // It maps digits to letters for movies, then reverses and double-base64 encodes.
@@ -20,19 +21,22 @@ function encodeId(id: string) {
 async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promise<SourcererOutput> {
   const media = ctx.media;
   let path;
+  let refererUrl;
 
   if (media.type === 'movie') {
     const movieId = media.tmdbId.split('').map(digitToLetterMap).join('');
     path = `movie/${encodeId(movieId)}`;
+    refererUrl = `${refererBaseUrl}/embed/movie/${media.tmdbId}`;
   } else {
     const tvId = `${media.tmdbId}-${media.season.number}-${media.episode.number}`;
     path = `tv/${encodeId(tvId)}`;
+    refererUrl = `${refererBaseUrl}/embed/tv/${media.tmdbId}/${media.season.number}/${media.episode.number}`;
   }
 
-  const url = `${baseUrl}/${path}`;
+  const url = `${apiBaseUrl}/${path}`;
   const data = await ctx.proxiedFetcher<any>(url, {
     headers: {
-      Referer: 'https://autoembed.pro/',
+      Referer: refererUrl,
       'User-Agent':
         'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
     },
