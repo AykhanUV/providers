@@ -1,71 +1,93 @@
 /* eslint-disable no-console */
+import { load } from 'cheerio';
+
 import { flags } from '@/entrypoint/utils/targets';
-import { SourcererOutput, makeSourcerer } from '@/providers/base';
+import { SourcererEmbed, SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 
-const apiBaseUrl = 'https://api2.vidsrc.vip';
-const refererBaseUrl = 'https://autoembed.pro';
+const baseUrl = 'https://autoembed.pro';
 
-// The encoding logic from autoembed's hls.js file.
-// It maps digits to letters for movies, then reverses and double-base64 encodes.
-function digitToLetterMap(digit: string): string {
-  const map = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
-  return map[parseInt(digit, 10)];
-}
-
-function encodeId(id: string) {
-  return btoa(btoa(id.split('').reverse().join('')));
+// Custom atob function from embedsu
+async function stringAtob(input: string): Promise<string> {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=';
+  const str = input.replace(/=+$/, '');
+  let output = '';
+  if (str.length % 4 === 1) {
+    throw new Error('The string to be decoded is not correctly encoded.');
+  }
+  for (let bc = 0, bs = 0, i = 0; i < str.length; i++) {
+    const buffer = str.charAt(i);
+    const charIndex = chars.indexOf(buffer);
+    if (charIndex === -1) continue;
+    bs = bc % 4 ? bs * 64 + charIndex : charIndex;
+    if (bc++ % 4) {
+      output += String.fromCharCode(255 & (bs >> ((-2 * bc) & 6)));
+    }
+  }
+  return output;
 }
 
 async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promise<SourcererOutput> {
-  const media = ctx.media;
-  let path;
-  let refererUrl;
+  const mediaType = ctx.media.type === 'show' ? 'tv' : 'movie';
+  let url = `${baseUrl}/embed/${mediaType}/${ctx.media.tmdbId}`;
 
-  if (media.type === 'movie') {
-    const movieId = media.tmdbId.split('').map(digitToLetterMap).join('');
-    path = `movie/${encodeId(movieId)}`;
-    refererUrl = `${refererBaseUrl}/embed/movie/${media.tmdbId}`;
-  } else {
-    const tvId = `${media.tmdbId}-${media.season.number}-${media.episode.number}`;
-    path = `tv/${encodeId(tvId)}`;
-    refererUrl = `${refererBaseUrl}/embed/tv/${media.tmdbId}/${media.season.number}/${media.episode.number}`;
+  if (ctx.media.type === 'show') {
+    url = `${url}/${ctx.media.season.number}/${ctx.media.episode.number}`;
   }
 
-  const url = `${apiBaseUrl}/${path}`;
   const data = await ctx.proxiedFetcher<any>(url, {
     headers: {
-      Referer: refererUrl,
-      'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36',
+      Referer: baseUrl,
     },
   });
 
-  // The API returns a JSON object with multiple potential source URLs.
-  // We iterate through them to find the first valid one.
-  let streamUrl: string | undefined;
-  for (let i = 1; data[`source${i}`]; i += 1) {
-    const source = data[`source${i}`];
-    if (source?.url) {
-      streamUrl = source.url;
-      break;
+  if (!data) throw new NotFoundError('Failed to fetch video source');
+
+  const $ = load(data);
+  let iframeSrc = $('iframe').attr('src');
+
+  if (!iframeSrc) {
+    const configEl = $('#Vconfig').html();
+    if (configEl) {
+      try {
+        const config = JSON.parse(configEl);
+        if (config.url) iframeSrc = config.url;
+      } catch (err) {
+        try {
+          const config = JSON.parse(await stringAtob(configEl));
+          if (config.url) iframeSrc = config.url;
+        } catch (err2) {
+          // In case of error, do nothing
+        }
+      }
+    } else {
+      const vConfigMatch = data.match(/window\.vConfig\s*=\s*JSON\.parse\(atob\(`([^`]+)/i);
+      const encodedConfig = vConfigMatch?.[1];
+      if (encodedConfig) {
+        const decodedConfig = JSON.parse(await stringAtob(encodedConfig));
+        if (decodedConfig?.url) {
+          iframeSrc = decodedConfig.url;
+        }
+      }
     }
   }
 
-  if (!streamUrl) throw new NotFoundError('No playable streams found');
+  if (!iframeSrc) throw new NotFoundError('Failed to find iframe src');
+
+  ctx.progress(50);
+
+  const embeds: SourcererEmbed[] = [
+    {
+      embedId: `autoembed-english`,
+      url: iframeSrc,
+    },
+  ];
+
+  ctx.progress(90);
 
   return {
-    embeds: [],
-    stream: [
-      {
-        id: 'primary',
-        type: 'hls',
-        playlist: streamUrl,
-        flags: [flags.CORS_ALLOWED],
-        captions: [],
-      },
-    ],
+    embeds,
   };
 }
 
@@ -73,7 +95,7 @@ export const autoembedScraper = makeSourcerer({
   id: 'autoembed',
   name: 'Autoembed 🔮',
   rank: 550,
-  disabled: false,
+  disabled: true,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,

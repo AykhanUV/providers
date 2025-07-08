@@ -30,6 +30,13 @@ import {
   oneServerPrimeboxEmbed,
   oneServerVidsrcsuEmbed,
 } from './embeds/1server';
+import {
+  autoembedBengaliScraper,
+  autoembedEnglishScraper,
+  autoembedHindiScraper,
+  autoembedTamilScraper,
+  autoembedTeluguScraper,
+} from './embeds/autoembed';
 import { cinemaosEmbeds } from './embeds/cinemaos';
 import { closeLoadScraper } from './embeds/closeload';
 import {
@@ -161,6 +168,11 @@ export function gatherAllEmbeds(): Array<Embed> {
     warezcdnembedHlsScraper,
     warezcdnembedMp4Scraper,
     warezPlayerScraper,
+    autoembedEnglishScraper,
+    autoembedHindiScraper,
+    autoembedBengaliScraper,
+    autoembedTamilScraper,
+    autoembedTeluguScraper,
     turbovidScraper,
     mp4hydraServer1Scraper,
     mp4hydraServer2Scraper,
