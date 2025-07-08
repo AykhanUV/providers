@@ -37,7 +37,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   });
 
   // The API returns a JSON object with source URLs. We take the first one.
-  const streamUrl = data?.source1;
+  const streamUrl = data?.source1?.url;
   if (!streamUrl) throw new NotFoundError('No stream found');
 
   return {
