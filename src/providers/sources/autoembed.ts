@@ -36,9 +36,18 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     },
   });
 
-  // The API returns a JSON object with source URLs. We take the first one.
-  const streamUrl = data?.source1?.url;
-  if (!streamUrl) throw new NotFoundError('No stream found');
+  // The API returns a JSON object with multiple potential source URLs.
+  // We iterate through them to find the first valid one.
+  let streamUrl: string | undefined;
+  for (let i = 1; data[`source${i}`]; i += 1) {
+    const source = data[`source${i}`];
+    if (source?.url) {
+      streamUrl = source.url;
+      break;
+    }
+  }
+
+  if (!streamUrl) throw new NotFoundError('No playable streams found');
 
   return {
     embeds: [],
