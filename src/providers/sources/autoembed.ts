@@ -6,8 +6,13 @@ import { NotFoundError } from '@/utils/errors';
 
 const baseUrl = 'https://api2.vidsrc.vip';
 
-// The encoding function from autoembed's hls.js file
-// It's a simple reverse and double base64 encode
+// The encoding logic from autoembed's hls.js file.
+// It maps digits to letters for movies, then reverses and double-base64 encodes.
+function digitToLetterMap(digit: string): string {
+  const map = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j'];
+  return map[parseInt(digit, 10)];
+}
+
 function encodeId(id: string) {
   return btoa(btoa(id.split('').reverse().join('')));
 }
@@ -17,9 +22,9 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   let path;
 
   if (media.type === 'movie') {
-    path = `movie/${media.tmdbId}`;
+    const movieId = media.tmdbId.split('').map(digitToLetterMap).join('');
+    path = `movie/${encodeId(movieId)}`;
   } else {
-    // The API requires the TMDB ID, season, and episode number to be encoded together for shows
     const tvId = `${media.tmdbId}-${media.season.number}-${media.episode.number}`;
     path = `tv/${encodeId(tvId)}`;
   }
