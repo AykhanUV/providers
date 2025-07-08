@@ -52,7 +52,7 @@ export const hollymoviehdScraper = makeSourcerer({
   id: 'hollymoviehd',
   name: 'HollyMovieHD 🥂',
   rank: 180,
-  disabled: false,
+  disabled: true,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
