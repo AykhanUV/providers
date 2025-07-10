@@ -19,7 +19,6 @@ import { mp4hydraScraper } from '@/providers/sources/mp4hydra';
 import { tugaflixScraper } from '@/providers/sources/tugaflix';
 import { vidsrcScraper } from '@/providers/sources/vidsrc';
 import { vidsrcsuScraper } from '@/providers/sources/vidsrcsu';
-import { zoechipScraper } from '@/providers/sources/zoechip';
 
 import {
   oneServerAnimepaheEmbed,
@@ -132,7 +131,6 @@ export function gatherAllSources(): Array<Sourcerer> {
     fsharetvScraper,
     vidsrcsuScraper,
     vidsrcScraper,
-    zoechipScraper,
     mp4hydraScraper,
     webtorScraper,
     embedsuScraper,
