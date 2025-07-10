@@ -9,9 +9,11 @@ import {
 import { mixdropScraper } from '@/providers/embeds/mixdrop';
 import { turbovidScraper } from '@/providers/embeds/turbovid';
 import { upcloudScraper } from '@/providers/embeds/upcloud';
+import { upstreamScraper } from '@/providers/embeds/upstream';
 import { autoembedScraper } from '@/providers/sources/autoembed';
 import { catflixScraper } from '@/providers/sources/catflix';
 import { ee3Scraper } from '@/providers/sources/ee3';
+import { fmoviesScraper } from '@/providers/sources/fmovies';
 import { fsharetvScraper } from '@/providers/sources/fsharetv';
 import { hianimeScraper } from '@/providers/sources/hianime';
 import { insertunitScraper } from '@/providers/sources/insertunit';
@@ -143,6 +145,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     coitusScraper,
     streamboxScraper,
     nunflixScraper,
+    fmoviesScraper,
     EightStreamScraper,
     xprimeScraper,
     ConsumetScraper,
@@ -160,6 +163,7 @@ export function gatherAllEmbeds(): Array<Embed> {
   // all embeds are gathered here
   return [
     upcloudScraper,
+    upstreamScraper,
     vidCloudScraper,
     mixdropScraper,
     ridooScraper,
