@@ -55,7 +55,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     `https://vidsrc.su/embed/${ctx.media.type === 'movie' ? `movie/${ctx.media.tmdbId}` : `tv/${ctx.media.tmdbId}/${ctx.media.season.number}/${ctx.media.episode.number}`}`,
     {
       headers: {
-        Referer: 'https://pstream.org',
+        Referer: 'https://pstream.org'
       },
     },
   );
