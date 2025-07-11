@@ -1,4 +1,5 @@
 import { makeEmbed } from '@/providers/base';
+import { createM3U8ProxyUrl } from '@/utils/proxy';
 
 // Thanks to Paradox_77 for helping with the decryption
 function hexToChar(hex: string): string {
@@ -83,16 +84,17 @@ export const turbovidScraper = makeEmbed({
 
     const playlist = decrypt(data, juiceKey);
 
+    const streamHeaders = {
+      referer: `${baseUrl}/`,
+      origin: baseUrl,
+    };
+
     return {
       stream: [
         {
           type: 'hls',
           id: 'primary',
-          playlist,
-          headers: {
-            referer: `${baseUrl}/`,
-            origin: baseUrl,
-          },
+          playlist: createM3U8ProxyUrl(playlist, streamHeaders),
           flags: [],
           captions: [],
         },
