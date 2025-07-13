@@ -46,6 +46,7 @@ import {
 } from '@/providers/embeds/xprime';
 import { embedsuScraper } from '@/providers/sources/embedsu';
 import { nepuScraper } from '@/providers/sources/nepu';
+import { pirxcyScraper } from '@/providers/sources/pirxcy';
 import { soaperTvScraper } from '@/providers/sources/soapertv';
 import { uiraliveScraper } from '@/providers/sources/uiralive';
 import { vidsrcScraper } from '@/providers/sources/vidsrc';
@@ -101,6 +102,7 @@ const SKIP_VALIDATION_CHECK_IDS = [
   vidsrcScraper.id,
   turbovidScraper.id,
   nepuScraper.id,
+  pirxcyScraper.id,
 ];
 
 export function isValidStream(stream: Stream | undefined): boolean {
