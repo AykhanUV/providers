@@ -3,40 +3,80 @@ import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 
-const API_SERVER = 'https://mbp.pirxcy.dev';
+const baseUrl = 'https://mbp.pirxcy.dev';
 
-// Helper function to convert quality string to standard format
-function normalizeQuality(quality: string): string {
-  const qualityMap: { [key: string]: string } = {
-    '4K': '2160',
-    '1080p': '1080',
-    '720p': '720',
-    HDTV: '720',
-    '480p': '480',
-    '360p': '360',
+function buildQualitiesFromStreams(data: {
+  list: Array<{ path: string; quality: string; real_quality: string; format: string }>;
+}) {
+  // Process streams data from the list array
+  const streams = data.list.reduce((acc: Record<string, string>, stream) => {
+    const { path, quality, format } = stream;
+    const realQuality = stream.real_quality;
+
+    // Only process MP4 streams
+    if (format !== 'mp4') return acc;
+
+    let qualityKey: number;
+    if (quality === '4K' || realQuality === '4K') {
+      qualityKey = 2160;
+    } else {
+      const qualityStr = quality.replace('p', '');
+      qualityKey = parseInt(qualityStr, 10);
+    }
+
+    if (Number.isNaN(qualityKey) || acc[qualityKey]) return acc;
+    acc[qualityKey] = path;
+    return acc;
+  }, {});
+
+  // Filter qualities based on provider type
+  const filteredStreams = Object.entries(streams).reduce((acc: Record<string, string>, [quality, url]) => {
+    // Skip unknown for cached provider if needed
+    // For now, include all qualities
+    acc[quality] = url;
+    return acc;
+  }, {});
+
+  return {
+    ...(filteredStreams[2160] && {
+      '4k': {
+        type: 'mp4' as const,
+        url: filteredStreams[2160],
+      },
+    }),
+    ...(filteredStreams[1080] && {
+      1080: {
+        type: 'mp4' as const,
+        url: filteredStreams[1080],
+      },
+    }),
+    ...(filteredStreams[720] && {
+      720: {
+        type: 'mp4' as const,
+        url: filteredStreams[720],
+      },
+    }),
+    ...(filteredStreams[480] && {
+      480: {
+        type: 'mp4' as const,
+        url: filteredStreams[480],
+      },
+    }),
+    ...(filteredStreams[360] && {
+      360: {
+        type: 'mp4' as const,
+        url: filteredStreams[360],
+      },
+    }),
+    ...(filteredStreams.unknown && {
+      unknown: {
+        type: 'mp4' as const,
+        url: filteredStreams.unknown,
+      },
+    }),
   };
-  return qualityMap[quality] || '720';
 }
 
-// Helper function to build qualities object from all available streams
-function buildQualitiesFromStreams(streams: Array<{ path: string; real_quality: string }>) {
-  const mp4Streams = streams.filter((s) => s.path && new URL(s.path).pathname.endsWith('.mp4'));
-  if (mp4Streams.length === 0) {
-    throw new NotFoundError('No playable MP4 streams found');
-  }
-
-  const qualities: { [key: string]: { url: string } } = {};
-
-  // Add all available qualities
-  for (const stream of mp4Streams) {
-    const normalizedQuality = normalizeQuality(stream.real_quality);
-    qualities[normalizedQuality] = { url: stream.path };
-  }
-
-  return qualities;
-}
-
-// Helper function to find media by TMDB ID
 async function findMediaByTMDBId(
   ctx: MovieScrapeContext | ShowScrapeContext,
   tmdbId: string,
@@ -44,7 +84,7 @@ async function findMediaByTMDBId(
   type: 'movie' | 'tv',
   year?: string,
 ): Promise<string> {
-  const searchUrl = `${API_SERVER}/search?q=${encodeURIComponent(title)}&type=${type}${year ? `&year=${year}` : ''}`;
+  const searchUrl = `${baseUrl}/search?q=${encodeURIComponent(title)}&type=${type}${year ? `&year=${year}` : ''}`;
   const searchRes = await ctx.proxiedFetcher(searchUrl);
 
   if (!searchRes.data || searchRes.data.length === 0) {
@@ -53,7 +93,7 @@ async function findMediaByTMDBId(
 
   // Find the correct internal ID by matching TMDB ID
   for (const result of searchRes.data) {
-    const detailUrl = `${API_SERVER}/details/${type}/${result.id}`;
+    const detailUrl = `${baseUrl}/details/${type}/${result.id}`;
     const detailRes = await ctx.proxiedFetcher(detailUrl);
 
     if (detailRes.data && detailRes.data.tmdb_id.toString() === tmdbId) {
@@ -73,38 +113,31 @@ async function scrapeMovie(ctx: MovieScrapeContext): Promise<SourcererOutput> {
     throw new NotFoundError('Missing required media information');
   }
 
-  try {
-    // Find internal media ID
-    const mediaId = await findMediaByTMDBId(ctx, tmdbId, title, 'movie', year);
+  // Find internal media ID
+  const mediaId = await findMediaByTMDBId(ctx, tmdbId, title, 'movie', year);
 
-    // Get stream links
-    const streamUrl = `${API_SERVER}/movie/${mediaId}`;
-    const streamData = await ctx.proxiedFetcher(streamUrl);
+  // Get stream links
+  const streamUrl = `${baseUrl}/movie/${mediaId}`;
+  const streamData = await ctx.proxiedFetcher(streamUrl);
 
-    if (!streamData.data || !streamData.data.list) {
-      throw new NotFoundError('No streams found for this movie');
-    }
-
-    const qualities = buildQualitiesFromStreams(streamData.data.list);
-
-    return {
-      stream: [
-        {
-          id: 'pirxcy',
-          type: 'file',
-          qualities,
-          flags: [flags.CORS_ALLOWED],
-          captions: [],
-        },
-      ],
-      embeds: [],
-    };
-  } catch (error) {
-    if (error instanceof NotFoundError) {
-      throw error;
-    }
-    throw new NotFoundError(`Failed to scrape movie: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  if (!streamData.data || !streamData.data.list) {
+    throw new NotFoundError('No streams found for this movie');
   }
+
+  const qualities = buildQualitiesFromStreams(streamData.data);
+
+  return {
+    stream: [
+      {
+        id: 'pirxcy',
+        type: 'file',
+        qualities,
+        flags: [flags.CORS_ALLOWED],
+        captions: [],
+      },
+    ],
+    embeds: [],
+  };
 }
 
 async function scrapeShow(ctx: ShowScrapeContext): Promise<SourcererOutput> {
@@ -118,44 +151,37 @@ async function scrapeShow(ctx: ShowScrapeContext): Promise<SourcererOutput> {
     throw new NotFoundError('Missing required media information');
   }
 
-  try {
-    // Find internal media ID
-    const mediaId = await findMediaByTMDBId(ctx, tmdbId, title, 'tv', year);
+  // Find internal media ID
+  const mediaId = await findMediaByTMDBId(ctx, tmdbId, title, 'tv', year);
 
-    // Get stream links
-    const streamUrl = `${API_SERVER}/tv/${mediaId}/${season}/${episode}`;
-    const streamData = await ctx.proxiedFetcher(streamUrl);
+  // Get stream links
+  const streamUrl = `${baseUrl}/tv/${mediaId}/${season}/${episode}`;
+  const streamData = await ctx.proxiedFetcher(streamUrl);
 
-    if (!streamData.data || !streamData.data.list) {
-      throw new NotFoundError('No streams found for this episode');
-    }
-
-    const qualities = buildQualitiesFromStreams(streamData.data.list);
-
-    return {
-      stream: [
-        {
-          id: 'pirxcy',
-          type: 'file',
-          qualities,
-          flags: [flags.CORS_ALLOWED],
-          captions: [],
-        },
-      ],
-      embeds: [],
-    };
-  } catch (error) {
-    if (error instanceof NotFoundError) {
-      throw error;
-    }
-    throw new NotFoundError(`Failed to scrape show: ${error instanceof Error ? error.message : 'Unknown error'}`);
+  if (!streamData.data || !streamData.data.list) {
+    throw new NotFoundError('No streams found for this episode');
   }
+
+  const qualities = buildQualitiesFromStreams(streamData.data);
+
+  return {
+    embeds: [],
+    stream: [
+      {
+        id: 'primary',
+        type: 'file',
+        qualities,
+        flags: [flags.CORS_ALLOWED],
+        captions: [],
+      },
+    ],
+  };
 }
 
 export const pirxcyScraper = makeSourcerer({
   id: 'pirxcy',
   name: 'Pirxcy',
-  rank: 150,
+  rank: 230,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie,
   scrapeShow,

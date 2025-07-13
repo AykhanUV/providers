@@ -1,7 +1,5 @@
 export function getConfig() {
-  let tmdbApiKey =
-    process.env.MOVIE_WEB_TMDB_API_KEY ??
-    'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmMjUwMjc3YmZjNjNkNzNiYjY5NmI3MWU2NThjMjUyMSIsIm5iZiI6MTcyNTcyNTQ1OS4wOTksInN1YiI6IjY2ZGM3YjEzNDQyYjExNDQzMmRkMTU5MSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.W7jVmiYfA3XQg0eXTdnjer5EkNlJ1F4k4bJyw5zdgVY';
+  let tmdbApiKey = process.env.MOVIE_WEB_TMDB_API_KEY ?? '';
   tmdbApiKey = tmdbApiKey.trim();
 
   if (!tmdbApiKey) {
