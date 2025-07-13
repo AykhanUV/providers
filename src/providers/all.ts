@@ -17,6 +17,7 @@ import { hianimeScraper } from '@/providers/sources/hianime';
 import { insertunitScraper } from '@/providers/sources/insertunit';
 import { mp4hydraScraper } from '@/providers/sources/mp4hydra';
 import { nepuScraper } from '@/providers/sources/nepu';
+import { pirxcyScraper } from '@/providers/sources/pirxcy';
 import { tugaflixScraper } from '@/providers/sources/tugaflix';
 import { vidsrcScraper } from '@/providers/sources/vidsrc';
 import { vidsrcsuScraper } from '@/providers/sources/vidsrcsu';
@@ -157,6 +158,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     oneroomScraper,
     zoechipScraper,
     nepuScraper,
+    pirxcyScraper,
   ];
 }
 
