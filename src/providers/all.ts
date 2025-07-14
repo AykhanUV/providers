@@ -9,7 +9,6 @@ import {
 import { mixdropScraper } from '@/providers/embeds/mixdrop';
 import { turbovidScraper } from '@/providers/embeds/turbovid';
 import { upcloudScraper } from '@/providers/embeds/upcloud';
-import { aetherScraper } from '@/providers/sources/aether';
 import { autoembedScraper } from '@/providers/sources/autoembed';
 import { catflixScraper } from '@/providers/sources/catflix';
 import { ee3Scraper } from '@/providers/sources/ee3';
@@ -122,7 +121,6 @@ import { xprimeScraper } from './sources/xprime';
 export function gatherAllSources(): Array<Sourcerer> {
   // all sources are gathered here
   return [
-    aetherScraper,
     cuevana3Scraper,
     catflixScraper,
     ridooMoviesScraper,
