@@ -102,6 +102,7 @@ import { ConsumetScraper } from './sources/consumet';
 import { cuevana3Scraper } from './sources/cuevana3';
 import { embedsuScraper } from './sources/embedsu';
 import { FedAPIScraper } from './sources/fedapi';
+import { fullhdfilmizleScraper } from './sources/fullhdfilmizle';
 import { hdRezkaScraper } from './sources/hdrezka';
 import { hollymoviehdScraper } from './sources/hollymoviehd';
 import { iosmirrorScraper } from './sources/iosmirror';
@@ -161,6 +162,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     zoechipScraper,
     nepuScraper,
     pirxcyScraper,
+    fullhdfilmizleScraper,
   ];
 }
 
