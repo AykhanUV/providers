@@ -180,7 +180,7 @@ async function scrapeShow(ctx: ShowScrapeContext): Promise<SourcererOutput> {
 
 export const pirxcyScraper = makeSourcerer({
   id: 'pirxcy',
-  name: 'Pirxcy',
+  name: 'Pirxcy 🪐',
   rank: 230,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie,

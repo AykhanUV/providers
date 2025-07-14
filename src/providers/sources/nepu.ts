@@ -37,7 +37,7 @@ async function scrape(ctx: MovieScrapeContext | ShowScrapeContext): Promise<Sour
 
 export const nepuScraper = makeSourcerer({
   id: 'nepu',
-  name: 'Nepu',
+  name: 'Nepu 💧',
   rank: 201,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: scrape,
