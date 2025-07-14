@@ -11,19 +11,19 @@ function decodePlayerUrl(encoded: string): string {
   const rot13ed = `${encoded}`.replace(/[a-z]/gi, function rot13Replace(s) {
     return String.fromCharCode(s.charCodeAt(0) + (s.toLowerCase() < 'n' ? 13 : -13));
   });
-  return Buffer.from(rot13ed, 'base64').toString('utf8');
+  return atob(rot13ed);
 }
 
 function decodeStreamUrl(encoded: string): string {
   const reversed = encoded.split('').reverse().join('');
-  const t = Buffer.from(reversed, 'base64').toString('binary');
+  const t = atob(reversed);
   let o = '';
   for (let i = 0; i < t.length; i += 1) {
     const r = 'K9L'[i % 3];
     const n = t.charCodeAt(i) - ((r.charCodeAt(0) % 5) + 1);
     o += String.fromCharCode(n);
   }
-  return Buffer.from(o, 'base64').toString('utf8');
+  return atob(o);
 }
 
 async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promise<SourcererOutput> {
@@ -88,7 +88,7 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
 
 export const fullhdfilmizleScraper = makeSourcerer({
   id: 'fullhdfilmizle',
-  name: 'Turkish dub',
+  name: 'FullHD Filmizlesene',
   rank: 100,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
