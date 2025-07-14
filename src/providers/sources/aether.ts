@@ -29,7 +29,12 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
       streamUrl = `${aetherBase}/stream/show/${ctx.media.tmdbId}/${ctx.media.season.number}/${ctx.media.episode.number}/${quality}`;
     }
 
-    const qualityKey = quality.toLowerCase().replace('p', '') as Qualities;
+    let qualityKey: Qualities;
+    if (quality.toUpperCase() === 'ORG') {
+      qualityKey = 'unknown';
+    } else {
+      qualityKey = quality.toLowerCase().replace('p', '') as Qualities;
+    }
     qualities[qualityKey] = {
       type: 'mp4',
       url: streamUrl,
