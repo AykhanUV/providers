@@ -39,6 +39,7 @@ export const nepuScraper = makeSourcerer({
   id: 'nepu',
   name: 'Nepu 💧',
   rank: 201,
+  disabled: true,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: scrape,
   scrapeShow: scrape,
