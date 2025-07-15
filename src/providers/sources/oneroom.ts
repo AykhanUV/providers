@@ -63,7 +63,7 @@ export const oneroomScraper = makeSourcerer({
   id: 'oneroom',
   name: 'OneRoom 🦭',
   rank: 178,
-  disabled: false,
+  disabled: true,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
