@@ -22,6 +22,7 @@ import { pirxcyScraper } from '@/providers/sources/pirxcy';
 import { tugaflixScraper } from '@/providers/sources/tugaflix';
 import { vidsrcScraper } from '@/providers/sources/vidsrc';
 import { vidsrcsuScraper } from '@/providers/sources/vidsrcsu';
+import { vixsrcScraper } from '@/providers/sources/vixsrc';
 import { zoechipScraper } from '@/providers/sources/zoechip';
 
 import {
@@ -160,6 +161,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     hollymoviehdScraper,
     oneroomScraper,
     zoechipScraper,
+    vixsrcScraper,
     nepuScraper,
     pirxcyScraper,
     fullhdfilmizleScraper,
