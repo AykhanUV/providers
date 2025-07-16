@@ -36,7 +36,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   if (!data || !data.source1) throw new NotFoundError('No sources found');
 
   const embeds: SourcererEmbed[] = [];
-  const embedIds = ['vidsrc-nova', 'vidsrc-comet', 'vidsrc-pulsar'];
+  const embedIds = ['vidsrc-comet', 'vidsrc-pulsar', 'vidsrc-nova'];
   let sourceIndex = 0;
   for (let i = 1; data[`source${i}`]; i++) {
     const source = data[`source${i}`];
@@ -59,7 +59,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 export const vidsrcvipScraper = makeSourcerer({
   id: 'vidsrcvip',
   name: 'VidSrc 🎧',
-  rank: 560,
+  rank: 150,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,

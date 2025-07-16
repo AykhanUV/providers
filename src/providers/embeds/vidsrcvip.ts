@@ -1,23 +1,29 @@
 import { flags } from '@/entrypoint/utils/targets';
 import { makeEmbed } from '@/providers/base';
+import { createM3U8ProxyUrl } from '@/utils/proxy';
 
-const embedProviders = [
-  {
-    id: 'vidsrc-nova',
-    name: 'Nova',
-    rank: 558,
-  },
+const embeds = [
   {
     id: 'vidsrc-comet',
     name: 'Comet',
-    rank: 560,
+    rank: 39,
   },
   {
     id: 'vidsrc-pulsar',
     name: 'Pulsar',
-    rank: 559,
+    rank: 38,
+  },
+  {
+    id: 'vidsrc-nova',
+    name: 'Nova',
+    rank: 37,
   },
 ];
+
+const headers = {
+  referer: 'https://vidsrc.vip/',
+  origin: 'https://vidsrc.vip',
+};
 
 function makeVidSrcEmbed(provider: { id: string; name: string; rank: number }) {
   return makeEmbed({
@@ -25,6 +31,20 @@ function makeVidSrcEmbed(provider: { id: string; name: string; rank: number }) {
     name: provider.name,
     rank: provider.rank,
     async scrape(ctx) {
+      if (ctx.url.includes('https://cdn.niggaflix.xyz')) {
+        return {
+          stream: [
+            {
+              id: 'primary',
+              type: 'hls',
+              playlist: createM3U8ProxyUrl(ctx.url, headers),
+              flags: [flags.CORS_ALLOWED],
+              captions: [],
+            },
+          ],
+        };
+      }
+
       return {
         stream: [
           {
@@ -40,4 +60,4 @@ function makeVidSrcEmbed(provider: { id: string; name: string; rank: number }) {
   });
 }
 
-export const [vidsrcNovaEmbed, vidsrcCometEmbed, vidsrcPulsarEmbed] = embedProviders.map(makeVidSrcEmbed);
+export const [vidsrcCometEmbed, vidsrcPulsarEmbed, vidsrcNovaEmbed] = embeds.map(makeVidSrcEmbed);
