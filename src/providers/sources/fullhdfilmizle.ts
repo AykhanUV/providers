@@ -94,7 +94,7 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
 
 export const fullhdfilmizleScraper = makeSourcerer({
   id: 'fullhdfilmizle',
-  name: 'ALTR Dubbed',
+  name: 'ALTR 🔵(Turkish)',
   rank: 800,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
