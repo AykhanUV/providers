@@ -13,6 +13,13 @@ export type Caption = {
   url: string;
   hasCorsRestrictions: boolean;
   language: string;
+  // Optional fields provided by Wyzie
+  flagUrl?: string;
+  display?: string;
+  media?: string;
+  isHearingImpaired?: boolean;
+  source?: string;
+  encoding?: string;
 };
 
 export function getCaptionTypeFromUrl(url: string): CaptionType | null {

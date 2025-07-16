@@ -62,6 +62,13 @@ export async function addWyzieCaptions(
       type: subtitle.format === 'srt' || subtitle.format === 'vtt' ? subtitle.format : 'srt',
       hasCorsRestrictions: false,
       language: subtitle.language,
+      // Additional metadata from Wyzie
+      flagUrl: subtitle.flagUrl,
+      display: subtitle.display,
+      media: subtitle.media,
+      isHearingImpaired: subtitle.isHearingImpaired,
+      source: typeof subtitle.source === 'number' ? subtitle.source.toString() : subtitle.source,
+      encoding: subtitle.encoding,
     }));
 
     return [...captions, ...wyzieCaptions];
