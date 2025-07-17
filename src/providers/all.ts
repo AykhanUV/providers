@@ -9,6 +9,7 @@ import {
 import { mixdropScraper } from '@/providers/embeds/mixdrop';
 import { turbovidScraper } from '@/providers/embeds/turbovid';
 import { upcloudScraper } from '@/providers/embeds/upcloud';
+import { vidmolyScraper } from '@/providers/embeds/vidmoly';
 import { vidsrcCometEmbed, vidsrcNovaEmbed, vidsrcPulsarEmbed } from '@/providers/embeds/vidsrcvip';
 import { aetherScraper } from '@/providers/sources/aether';
 import { autoembedScraper } from '@/providers/sources/autoembed';
@@ -105,6 +106,7 @@ import { ConsumetScraper } from './sources/consumet';
 import { cuevana3Scraper } from './sources/cuevana3';
 import { embedsuScraper } from './sources/embedsu';
 import { FedAPIScraper } from './sources/fedapi';
+import { filmekseniScraper } from './sources/filmekseni';
 import { fullhdfilmizleScraper } from './sources/fullhdfilmizle';
 import { hdRezkaScraper } from './sources/hdrezka';
 import { hollymoviehdScraper } from './sources/hollymoviehd';
@@ -167,6 +169,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     nepuScraper,
     pirxcyScraper,
     fullhdfilmizleScraper,
+    filmekseniScraper,
     vidsrcvipScraper,
   ];
 }
@@ -244,6 +247,7 @@ export function gatherAllEmbeds(): Array<Embed> {
     streamwishSpanishScraper,
     streamwishEnglishScraper,
     streamtapeLatinoScraper,
+    vidmolyScraper,
     ...cinemaosEmbeds,
     // ...cinemaosHexaEmbeds,
     vidsrcNovaEmbed,

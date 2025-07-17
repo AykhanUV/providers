@@ -31,6 +31,7 @@ import {
   streamwishSpanishScraper,
 } from '@/providers/embeds/streamwish';
 import { turbovidScraper } from '@/providers/embeds/turbovid';
+import { vidmolyScraper } from '@/providers/embeds/vidmoly';
 import { vidsrcNovaEmbed } from '@/providers/embeds/vidsrcvip';
 import { viperScraper } from '@/providers/embeds/viper';
 import { warezcdnembedMp4Scraper } from '@/providers/embeds/warezcdn/mp4';
@@ -105,6 +106,7 @@ const SKIP_VALIDATION_CHECK_IDS = [
   nepuScraper.id,
   pirxcyScraper.id,
   vidsrcNovaEmbed.id,
+  vidmolyScraper.id,
 ];
 
 export function isValidStream(stream: Stream | undefined): boolean {
