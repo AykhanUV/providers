@@ -62,7 +62,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 
 export const filmekseniScraper = makeSourcerer({
   id: 'filmekseni',
-  name: 'Filmekseni ♠️(Turkish)',
+  name: 'Ekseni ♠️(Turkish)',
   rank: 181,
   flags: [],
   scrapeMovie: comboScraper,
