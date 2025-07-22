@@ -94,7 +94,8 @@ function embed(provider: { id: string; rank: number; name?: string; disabled?: b
         .split('-')
         .map((word) => word[0].toUpperCase() + word.slice(1))
         .join(' '),
-    disabled: provider.disabled,
+    // disabled: provider.disabled,
+    disabled: true,
     rank: provider.rank,
     async scrape(ctx) {
       return {

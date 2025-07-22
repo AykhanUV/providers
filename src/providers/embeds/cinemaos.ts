@@ -10,6 +10,7 @@ export function makeCinemaOSEmbed(server: string, rank: number) {
     id: `cinemaos-${server}`,
     name: `${server.charAt(0).toUpperCase() + server.slice(1)}`,
     rank,
+    disabled: true,
     async scrape(ctx): Promise<EmbedOutput> {
       const query = JSON.parse(ctx.url);
       const { tmdbId, type, season, episode } = query;
