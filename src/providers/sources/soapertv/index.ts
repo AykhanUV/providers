@@ -6,7 +6,7 @@ import { Stream } from '@/providers/streams';
 import { compareMedia } from '@/utils/compare';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
-import { createM3U8ProxyUrl } from '@/utils/proxy';
+import { convertPlaylistsToDataUrls } from '@/utils/playlist';
 
 import { InfoResponse } from './types';
 import { SourcererOutput, makeSourcerer } from '../../base';
@@ -174,6 +174,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
     'User-Agent':
       'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1',
     'Viewport-Width': '375',
+    Origin: baseUrl,
   };
 
   return {
@@ -181,7 +182,7 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
     stream: [
       {
         id: 'primary',
-        playlist: createM3U8ProxyUrl(`${baseUrl}/${streamResJson.val}`, headers),
+        playlist: await convertPlaylistsToDataUrls(ctx.proxiedFetcher, `${baseUrl}/${streamResJson.val}`, headers),
         type: 'hls',
         proxyDepth: 2,
         flags: [flags.CORS_ALLOWED],
@@ -191,7 +192,11 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
         ? [
             {
               id: 'backup',
-              playlist: createM3U8ProxyUrl(`${baseUrl}/${streamResJson.val_bak}`, headers),
+              playlist: await convertPlaylistsToDataUrls(
+                ctx.proxiedFetcher,
+                `${baseUrl}/${streamResJson.val_bak}`,
+                headers,
+              ),
               type: 'hls',
               flags: [flags.CORS_ALLOWED],
               proxyDepth: 2,
@@ -205,16 +210,10 @@ const universalScraper = async (ctx: MovieScrapeContext | ShowScrapeContext): Pr
 
 export const soaperTvScraper = makeSourcerer({
   id: 'soapertv',
-  name: 'IceFY 🧊',
-  rank: 236,
-  disabled: true, // they done broke it again
+  name: 'SoaperTV',
+  rank: 130,
+  disabled: true,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: universalScraper,
   scrapeShow: universalScraper,
 });
-
-// playlist: await convertPlaylistsToDataUrls(ctx.proxiedFetcher, `${baseUrl}/${streamResJson.val_bak}`, {
-//   'User-Agent':
-//     'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.0 Mobile/15E148 Safari/604.1',
-//   'Viewport-Width': '375',
-// }),

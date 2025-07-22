@@ -49,7 +49,6 @@ import {
 import { embedsuScraper } from '@/providers/sources/embedsu';
 import { nepuScraper } from '@/providers/sources/nepu';
 import { pirxcyScraper } from '@/providers/sources/pirxcy';
-import { soaperTvScraper } from '@/providers/sources/soapertv';
 import { uiraliveScraper } from '@/providers/sources/uiralive';
 import { vidsrcScraper } from '@/providers/sources/vidsrc';
 import { wecimaScraper } from '@/providers/sources/wecima';
@@ -100,7 +99,6 @@ const SKIP_VALIDATION_CHECK_IDS = [
   oneServerAnizoneEmbed.id,
   wecimaScraper.id,
   ...cinemaosHexaEmbeds.map((e) => e.id),
-  soaperTvScraper.id,
   vidsrcScraper.id,
   turbovidScraper.id,
   nepuScraper.id,
