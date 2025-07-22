@@ -71,6 +71,7 @@ export const mp4hydraScraper = makeSourcerer({
   id: 'mp4hydra',
   name: 'Mp4Hydra 🐌',
   rank: 3,
+  disabled: true,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
