@@ -1,9 +1,9 @@
 import { load } from 'cheerio';
 
 import { SourcererOutput, makeSourcerer } from '@/providers/base';
+import { compareTitle } from '@/utils/compare';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
-import { compareTitle } from '@/utils/compare';
 
 const sezondiziBase = 'https://sezonlukdizi6.com';
 
