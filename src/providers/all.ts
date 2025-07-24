@@ -115,6 +115,7 @@ import { iosmirrorPVScraper } from './sources/iosmirrorpv';
 import { nunflixScraper } from './sources/nunflix';
 import { oneroomScraper } from './sources/oneroom';
 import { ridooMoviesScraper } from './sources/ridomovies';
+import { sezonlukdiziScraper } from './sources/sezonlukdizi';
 import { slidemoviesScraper } from './sources/slidemovies';
 import { soaperTvScraper } from './sources/soapertv';
 import { streamboxScraper } from './sources/streambox';
@@ -171,6 +172,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     fullhdfilmizleScraper,
     filmekseniScraper,
     vidsrcvipScraper,
+    sezonlukdiziScraper,
   ];
 }
 
