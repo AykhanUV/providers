@@ -1,5 +1,6 @@
 import { load } from 'cheerio';
 
+import { flags } from '@/entrypoint/utils/targets';
 import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { compareTitle } from '@/utils/compare';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
@@ -102,7 +103,7 @@ export const sezonlukdiziScraper = makeSourcerer({
   id: 'sezonlukdizi',
   name: 'SzDizi 🍭(Turkish)',
   rank: 500,
-  flags: [],
+  flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
 });
