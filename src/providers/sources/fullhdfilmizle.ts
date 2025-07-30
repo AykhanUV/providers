@@ -34,6 +34,7 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
   const searchResult = await ctx.proxiedFetcher<string>(searchUrl, {
     headers: {
       Referer: fullHDBase,
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0',
     },
   });
 
@@ -44,6 +45,7 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
   const mediaPage = await ctx.proxiedFetcher<string>(mediaLink, {
     headers: {
       Referer: searchUrl,
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0',
     },
   });
 
