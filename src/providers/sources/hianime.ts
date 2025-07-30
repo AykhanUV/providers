@@ -136,7 +136,7 @@ export const hianimeScraper = makeSourcerer({
   id: 'hianime',
   name: 'HiAnime ⛩️(Anime)',
   rank: 7,
-  disabled: false,
+  disabled: true,
   flags: [flags.CORS_ALLOWED],
   scrapeShow: comboScraper,
 });

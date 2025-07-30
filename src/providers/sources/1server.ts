@@ -59,7 +59,7 @@ export const oneServerScraper = makeSourcerer({
   id: '1server',
   name: '1Server ☁️',
   rank: 90,
-  disabled: false,
+  disabled: true,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
