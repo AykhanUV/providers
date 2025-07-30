@@ -23,6 +23,7 @@ import { nepuScraper } from '@/providers/sources/nepu';
 import { pirxcyScraper } from '@/providers/sources/pirxcy';
 import { tugaflixScraper } from '@/providers/sources/tugaflix';
 import { vidsrcScraper } from '@/providers/sources/vidsrc';
+import { vidsrccxScraper } from '@/providers/sources/vidsrccx';
 import { vidsrcsuScraper } from '@/providers/sources/vidsrcsu';
 import { vidsrcvipScraper } from '@/providers/sources/vidsrcvip';
 import { vixsrcScraper } from '@/providers/sources/vixsrc';
@@ -142,6 +143,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     ee3Scraper,
     fsharetvScraper,
     vidsrcsuScraper,
+    vidsrccxScraper,
     vidsrcScraper,
     mp4hydraScraper,
     webtorScraper,
