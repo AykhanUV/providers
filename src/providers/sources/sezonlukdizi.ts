@@ -104,6 +104,5 @@ export const sezonlukdiziScraper = makeSourcerer({
   name: 'SzDizi 🍭(Turkish)',
   rank: 500,
   flags: [flags.CORS_ALLOWED],
-  scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
 });

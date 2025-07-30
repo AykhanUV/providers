@@ -98,5 +98,4 @@ export const fullhdfilmizleScraper = makeSourcerer({
   rank: 800,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
-  scrapeShow: comboScraper,
 });
