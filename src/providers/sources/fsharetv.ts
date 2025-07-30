@@ -90,7 +90,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 export const fsharetvScraper = makeSourcerer({
   id: 'fsharetv',
   name: 'Fshare 👽',
-  rank: 170,
+  rank: 190,
   flags: [],
   scrapeMovie: comboScraper,
 });
