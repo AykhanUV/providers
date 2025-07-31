@@ -78,6 +78,12 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
     `/media/${media.tmdbId}/`,
   );
 
+  const res = await ctx.proxiedFetcher.full(signedUrl, {
+    method: 'HEAD',
+  });
+
+  if (res.statusCode !== 200) throw new NotFoundError('stream not found');
+
   return {
     stream: [
       {
