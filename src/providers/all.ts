@@ -22,6 +22,7 @@ import { mp4hydraScraper } from '@/providers/sources/mp4hydra';
 import { nepuScraper } from '@/providers/sources/nepu';
 import { pirxcyScraper } from '@/providers/sources/pirxcy';
 import { tugaflixScraper } from '@/providers/sources/tugaflix';
+import { videasyScraper } from '@/providers/sources/videasy';
 import { vidsrcScraper } from '@/providers/sources/vidsrc';
 import { vidsrccxScraper } from '@/providers/sources/vidsrccx';
 import { vidsrcsuScraper } from '@/providers/sources/vidsrcsu';
@@ -177,6 +178,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     filmekseniScraper,
     vidsrcvipScraper,
     sezonlukdiziScraper,
+    videasyScraper,
   ];
 }
 
