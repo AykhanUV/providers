@@ -42,6 +42,7 @@ export const vidfastScraper = makeSourcerer({
   id: 'vidfast',
   name: 'VidFast 🏎️',
   rank: 200,
+  disabled: true,
   flags: [],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
