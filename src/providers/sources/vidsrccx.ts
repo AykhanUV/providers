@@ -104,5 +104,4 @@ export const vidsrccxScraper = makeSourcerer({
   rank: 173,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
-  scrapeShow: comboScraper,
 });
