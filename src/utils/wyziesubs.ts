@@ -54,7 +54,7 @@ export async function addWyzieCaptions(
 
     console.log('Searching Wyzie subtitles with params:', searchParams);
     const wyzieSubtitles: SubtitleData[] = await searchSubtitles(searchParams);
-    console.log('Found Wyzie subtitles:', wyzieSubtitles);
+    // console.log('Found Wyzie subtitles:', wyzieSubtitles);
 
     const wyzieCaptions: Caption[] = wyzieSubtitles.map((subtitle) => ({
       id: subtitle.id,

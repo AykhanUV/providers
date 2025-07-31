@@ -94,6 +94,10 @@ export async function addOpenSubtitlesCaptions(
       Promise.race([openSubsPromise, timeout(5000, 'OpenSubtitles')]),
     ]);
 
+    // Debug logging
+    // console.log('Wyzie captions found:', wyzieCaptions?.length || 0);
+    // console.log('OpenSubtitles captions found:', openSubsCaptions?.length || 0);
+
     // Add any successful captions to our result
     if (wyzieCaptions) allCaptions.push(...wyzieCaptions);
     if (openSubsCaptions) allCaptions.push(...openSubsCaptions);
