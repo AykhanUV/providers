@@ -1,3 +1,4 @@
+import { flags } from '@/entrypoint/utils/targets';
 import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
@@ -40,7 +41,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
         id: 'primary',
         type: 'hls',
         playlist: createM3U8ProxyUrl(m3u8Url.url, streamHeaders),
-        flags: [],
+        flags: [flags.CORS_ALLOWED],
         captions: [],
       },
     ],
