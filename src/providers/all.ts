@@ -122,6 +122,7 @@ import { soaperTvScraper } from './sources/soapertv';
 import { streamboxScraper } from './sources/streambox';
 import { uiraliveScraper } from './sources/uiralive';
 import { vidapiClickScraper } from './sources/vidapiclick';
+import { vidfastScraper } from './sources/vidfast';
 import { warezcdnScraper } from './sources/warezcdn';
 import { webtorScraper } from './sources/webtor';
 import { wecimaScraper } from './sources/wecima';
@@ -130,6 +131,7 @@ import { xprimeScraper } from './sources/xprime';
 export function gatherAllSources(): Array<Sourcerer> {
   // all sources are gathered here
   return [
+    vidfastScraper,
     aetherScraper,
     cuevana3Scraper,
     catflixScraper,
