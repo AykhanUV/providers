@@ -7,6 +7,11 @@ import { NotFoundError } from '@/utils/errors';
 
 const fullHDBase = 'https://www.fullhdfilmizlesene.so';
 
+const userAgents = [
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0',
+  'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+];
+
 function decodePlayerUrl(encoded: string): string {
   const rot13ed = `${encoded}`.replace(/[a-z]/gi, function rot13Replace(s) {
     return String.fromCharCode(s.charCodeAt(0) + (s.toLowerCase() < 'n' ? 13 : -13));
@@ -34,7 +39,7 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
   const searchResult = await ctx.proxiedFetcher<string>(searchUrl, {
     headers: {
       Referer: fullHDBase,
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0',
+      'User-Agent': userAgents[0],
     },
   });
 
@@ -45,7 +50,7 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
   const mediaPage = await ctx.proxiedFetcher<string>(mediaLink, {
     headers: {
       Referer: searchUrl,
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0',
+      'User-Agent': userAgents[0],
     },
   });
 
@@ -62,36 +67,45 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
 
   const playerUrl = decodePlayerUrl(sources[0]);
 
-  const playerPage = await ctx.proxiedFetcher<string>(playerUrl, {
-    headers: {
-      Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-      'Accept-Language': 'en-US,en;q=0.5',
-      'Sec-Fetch-Dest': 'iframe',
-      'Sec-Fetch-Mode': 'navigate',
-      'Sec-Fetch-Site': 'cross-site',
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0',
-      Referer: 'https://www.fullhdfilmizlesene.so/',
-    },
-  });
+  for (const userAgent of userAgents) {
+    try {
+      const playerPage = await ctx.proxiedFetcher<string>(playerUrl, {
+        headers: {
+          Accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+          'Accept-Language': 'en-US,en;q=0.5',
+          'Sec-Fetch-Dest': 'iframe',
+          'Sec-Fetch-Mode': 'navigate',
+          'Sec-Fetch-Site': 'cross-site',
+          'User-Agent': userAgent,
+          Referer: 'https://www.fullhdfilmizlesene.so/',
+        },
+      });
 
-  const streamMatch = playerPage.match(/"file": av\('(.*?)'\)/);
-  if (!streamMatch) throw new NotFoundError('Could not find encoded stream URL');
+      const streamMatch = playerPage.match(/"file": av\('(.*?)'\)/);
+      if (!streamMatch) throw new NotFoundError('Could not find encoded stream URL');
 
-  const encodedStream = streamMatch[1];
-  const streamUrl = decodeStreamUrl(encodedStream);
+      const encodedStream = streamMatch[1];
+      const streamUrl = decodeStreamUrl(encodedStream);
 
-  return {
-    embeds: [],
-    stream: [
-      {
-        id: 'primary',
-        type: 'hls',
-        playlist: streamUrl,
-        flags: [flags.CORS_ALLOWED],
-        captions: [],
-      },
-    ],
-  };
+      return {
+        embeds: [],
+        stream: [
+          {
+            id: 'primary',
+            type: 'hls',
+            playlist: streamUrl,
+            flags: [flags.CORS_ALLOWED],
+            captions: [],
+          },
+        ],
+      };
+    } catch (err) {
+      if (err instanceof NotFoundError) continue;
+      throw err;
+    }
+  }
+
+  throw new NotFoundError('Could not find encoded stream URL');
 }
 
 export const fullhdfilmizleScraper = makeSourcerer({
