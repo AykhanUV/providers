@@ -52,7 +52,7 @@ export const videasyScraper = makeSourcerer({
   id: 'videasy',
   name: 'Videasy 🪄',
   rank: 400,
-  flags: [],
+  flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
 });
