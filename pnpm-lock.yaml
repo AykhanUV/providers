@@ -44,9 +44,6 @@ importers:
       unpacker:
         specifier: ^1.0.1
         version: 1.0.1
-      wyzie-lib:
-        specifier: ^2.2.5
-        version: 2.2.5
     devDependencies:
       '@nabla/vite-plugin-eslint':
         specifier: ^2.0.5
@@ -2538,9 +2535,6 @@ packages:
         optional: true
       utf-8-validate:
         optional: true
-
-  wyzie-lib@2.2.5:
-    resolution: {integrity: sha512-hOvAqS0VJhqTi2TRFkQ1YSEvX5ltrKC+ZWGiGDZ2Qn6b2t5Ov5DJILFCO2W/1ScK+BKOKHen7tRidatj1W62oA==}
 
   y18n@5.0.8:
     resolution: {integrity: sha512-0pfFzegeDWJHJIAmTLRP2DwHjdF5s7jo9tuztdQxAhINCdvS+3nGINqPd00AphqJR/0LhANUS6/+7SCb98YOfA==}
@@ -5247,8 +5241,6 @@ snapshots:
   wrappy@1.0.2: {}
 
   ws@8.18.0: {}
-
-  wyzie-lib@2.2.5: {}
 
   y18n@5.0.8: {}
 
