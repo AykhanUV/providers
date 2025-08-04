@@ -1,72 +1,10 @@
 import { flags } from '@/entrypoint/utils/targets';
 import { EmbedOutput, makeEmbed } from '@/providers/base';
+import { labelToLanguageCode } from '@/providers/captions';
 import { NotFoundError } from '@/utils/errors';
 import { createM3U8ProxyUrl } from '@/utils/proxy';
 
 const BaseUrl = 'https://player.vidzee.wtf/api/server';
-
-const languageMap: Record<string, string> = {
-  'chinese - hong kong': 'zh',
-  'chinese - traditional': 'zh',
-  czech: 'cs',
-  danish: 'da',
-  dutch: 'nl',
-  english: 'en',
-  'english - sdh': 'en',
-  finnish: 'fi',
-  french: 'fr',
-  german: 'de',
-  greek: 'el',
-  hungarian: 'hu',
-  italian: 'it',
-  korean: 'ko',
-  norwegian: 'no',
-  polish: 'pl',
-  portuguese: 'pt',
-  'portuguese - brazilian': 'pt',
-  romanian: 'ro',
-  'spanish - european': 'es',
-  'spanish - latin american': 'es',
-  spanish: 'es',
-  swedish: 'sv',
-  turkish: 'tr',
-  اَلْعَرَبِيَّةُ: 'ar',
-  বাংলা: 'bn',
-  filipino: 'tl',
-  indonesia: 'id',
-  اردو: 'ur',
-  English: 'en',
-  Arabic: 'ar',
-  Bosnian: 'bs',
-  Bulgarian: 'bg',
-  Croatian: 'hr',
-  Czech: 'cs',
-  Danish: 'da',
-  Dutch: 'nl',
-  Estonian: 'et',
-  Finnish: 'fi',
-  French: 'fr',
-  German: 'de',
-  Greek: 'el',
-  Hebrew: 'he',
-  Hungarian: 'hu',
-  Indonesian: 'id',
-  Italian: 'it',
-  Norwegian: 'no',
-  Persian: 'fa',
-  Polish: 'pl',
-  Portuguese: 'pt',
-  'Protuguese (BR)': 'pt-br',
-  Romanian: 'ro',
-  Russian: 'ru',
-  russian: 'ru',
-  Serbian: 'sr',
-  Slovenian: 'sl',
-  Spanish: 'es',
-  Swedish: 'sv',
-  Thai: 'th',
-  Turkish: 'tr',
-};
 
 export const vidzeeServer1Embed = makeEmbed({
   id: 'vidzee-server1',
@@ -100,12 +38,11 @@ export const vidzeeServer1Embed = makeEmbed({
 
     const captions =
       data.tracks?.map((track: { lang: string; url: string }, i: number) => {
-        const languageBase = track.lang.toLowerCase();
         return {
           id: i,
           type: 'vtt',
           url: track.url,
-          language: languageMap[languageBase] || 'unknown',
+          language: labelToLanguageCode(track.lang) || 'unknown',
         };
       }) || [];
 
@@ -160,12 +97,11 @@ export const vidzeeServer2Embed = makeEmbed({
 
     const captions =
       data.tracks?.map((track: { lang: string; url: string }, i: number) => {
-        const languageBase = track.lang.toLowerCase();
         return {
           id: i,
           type: 'vtt',
           url: track.url,
-          language: languageMap[languageBase] || 'unknown',
+          language: labelToLanguageCode(track.lang) || 'unknown',
         };
       }) || [];
 
