@@ -1,9 +1,7 @@
 import type { ShowMedia } from '@/entrypoint/utils/media';
-import { flags } from '@/entrypoint/utils/targets';
 import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
-import { createM3U8ProxyUrl } from '@/utils/proxy';
 
 import { decode, mirza } from './decrypt';
 
@@ -102,8 +100,10 @@ async function vidsrcScrape(ctx: MovieScrapeContext | ShowScrapeContext): Promis
       {
         id: 'vidsrc-cloudnestra',
         type: 'hls',
-        playlist: createM3U8ProxyUrl(streamUrl, headers),
-        flags: [flags.CORS_ALLOWED],
+        playlist: streamUrl,
+        headers,
+        proxyDepth: 2,
+        flags: [],
         captions: [],
       },
     ],
@@ -115,7 +115,7 @@ export const vidsrcScraper = makeSourcerer({
   id: 'cloudnestra',
   name: 'Cloudnestra ⚡️',
   rank: 180,
-  flags: [flags.CORS_ALLOWED],
+  flags: [],
   scrapeMovie: vidsrcScrape,
   scrapeShow: vidsrcScrape,
 });
