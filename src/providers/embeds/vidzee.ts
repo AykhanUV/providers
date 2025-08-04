@@ -22,7 +22,7 @@ export const vidzeeServer1Embed = makeEmbed({
       params.append('ep', query.episode.toString());
     }
 
-    const data = await ctx.fetcher(`${BaseUrl}?${params.toString()}`);
+    const data = await ctx.proxiedFetcher(`${BaseUrl}?${params.toString()}`);
     if (!data) throw new NotFoundError('No response received');
     if (!data.url || !Array.isArray(data.url) || data.url.length === 0) {
       throw new NotFoundError('No stream URL found in response');
@@ -80,7 +80,7 @@ export const vidzeeServer2Embed = makeEmbed({
       params.append('ep', query.episode.toString());
     }
 
-    const data = await ctx.fetcher(`${BaseUrl}?${params.toString()}`);
+    const data = await ctx.proxiedFetcher(`${BaseUrl}?${params.toString()}`);
     if (!data) throw new NotFoundError('No response received');
     if (!data.url || !Array.isArray(data.url) || data.url.length === 0) {
       throw new NotFoundError('No stream URL found in response');
