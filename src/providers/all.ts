@@ -18,6 +18,7 @@ import { ee3Scraper } from '@/providers/sources/ee3';
 import { fsharetvScraper } from '@/providers/sources/fsharetv';
 import { hianimeScraper } from '@/providers/sources/hianime';
 import { insertunitScraper } from '@/providers/sources/insertunit';
+import { meridianScraper } from '@/providers/sources/meridian';
 import { mp4hydraScraper } from '@/providers/sources/mp4hydra';
 import { nepuScraper } from '@/providers/sources/nepu';
 import { pirxcyScraper } from '@/providers/sources/pirxcy';
@@ -184,6 +185,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     sezonlukdiziScraper,
     videasyScraper,
     vidzeeScraper,
+    meridianScraper,
   ];
 }
 
