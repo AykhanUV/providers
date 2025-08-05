@@ -27,6 +27,7 @@ import { vidsrcScraper } from '@/providers/sources/vidsrc';
 import { vidsrccxScraper } from '@/providers/sources/vidsrccx';
 import { vidsrcsuScraper } from '@/providers/sources/vidsrcsu';
 import { vidsrcvipScraper } from '@/providers/sources/vidsrcvip';
+import { vidsrcWTFScraper } from '@/providers/sources/vidsrcwtf';
 import { vixsrcScraper } from '@/providers/sources/vixsrc';
 import { zoechipScraper } from '@/providers/sources/zoechip';
 
@@ -179,6 +180,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     fullhdfilmizleScraper,
     filmekseniScraper,
     vidsrcvipScraper,
+    vidsrcWTFScraper,
     sezonlukdiziScraper,
     videasyScraper,
     vidzeeScraper,
