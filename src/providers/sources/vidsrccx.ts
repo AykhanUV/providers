@@ -22,11 +22,14 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
   const res = await ctx.proxiedFetcher.full(url, {
     method: 'HEAD',
     headers: {
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+      'User-Agent':
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
     },
   });
 
   if (res.statusCode !== 200) throw new NotFoundError('stream not found');
+
+  ctx.progress(100);
 
   return {
     stream: [
