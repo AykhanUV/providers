@@ -2,6 +2,7 @@ import { load } from 'cheerio';
 
 import { flags } from '@/entrypoint/utils/targets';
 import { SourcererOutput, makeSourcerer } from '@/providers/base';
+import { labelToLanguageCode, removeDuplicatedLanguages } from '@/providers/captions';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 import { createM3U8ProxyUrl } from '@/utils/proxy';
@@ -122,13 +123,21 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   }
 
   const tracks = JSON.parse(tracksMatch[1]);
-  const captions = tracks.map((track: any) => ({
-    id: track.file,
-    url: track.file,
-    type: 'vtt',
-    language: track.label,
-    hasCorsRestrictions: true,
-  }));
+  let captions = tracks
+    .map((track: any) => {
+      const language = labelToLanguageCode(track.label);
+      if (!language) return null;
+      return {
+        id: track.file,
+        url: track.file,
+        type: 'vtt',
+        language,
+        hasCorsRestrictions: true,
+      };
+    })
+    .filter((x: any) => x !== null);
+
+  captions = removeDuplicatedLanguages(captions);
 
   return {
     stream: [
