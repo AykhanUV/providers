@@ -113,6 +113,7 @@ import { embedsuScraper } from './sources/embedsu';
 import { FedAPIScraper } from './sources/fedapi';
 import { filmekseniScraper } from './sources/filmekseni';
 import { fullhdfilmizleScraper } from './sources/fullhdfilmizle';
+import { flickyScraper } from './sources/flicky';
 import { hdRezkaScraper } from './sources/hdrezka';
 import { hollymoviehdScraper } from './sources/hollymoviehd';
 import { iosmirrorScraper } from './sources/iosmirror';
@@ -186,6 +187,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     videasyScraper,
     vidzeeScraper,
     meridianScraper,
+    flickyScraper,
   ];
 }
 
