@@ -59,6 +59,7 @@ import {
   ConsumetVidStreamingScraper,
 } from './embeds/consumet';
 import { FedAPIPrivateScraper, FedDBScraper } from './embeds/fedapi';
+import { madplayBaseEmbed, madplayNsapiEmbed } from './embeds/madplay';
 import { mp4hydraServer1Scraper, mp4hydraServer2Scraper } from './embeds/mp4hydra';
 import { ridooScraper } from './embeds/ridoo';
 import { streamtapeLatinoScraper, streamtapeScraper } from './embeds/streamtape';
@@ -118,6 +119,7 @@ import { hdRezkaScraper } from './sources/hdrezka';
 import { hollymoviehdScraper } from './sources/hollymoviehd';
 import { iosmirrorScraper } from './sources/iosmirror';
 import { iosmirrorPVScraper } from './sources/iosmirrorpv';
+import { madplayScraper } from './sources/madplay';
 import { nunflixScraper } from './sources/nunflix';
 import { oneroomScraper } from './sources/oneroom';
 import { ridooMoviesScraper } from './sources/ridomovies';
@@ -188,6 +190,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     vidzeeScraper,
     meridianScraper,
     flickyScraper,
+    madplayScraper,
   ];
 }
 
@@ -272,5 +275,7 @@ export function gatherAllEmbeds(): Array<Embed> {
     vidsrcPulsarEmbed,
     vidzeeServer1Embed,
     vidzeeServer2Embed,
+    madplayBaseEmbed,
+    madplayNsapiEmbed,
   ];
 }
