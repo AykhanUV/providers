@@ -44,6 +44,26 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     throw new NotFoundError('Movie or series not found');
   }
 
+  if (ctx.media.type === 'show') {
+    const episodeNumber = ctx.media.episode.number;
+    const seasonPage = await ctx.proxiedFetcher<string>(foundUrl, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:141.0) Gecko/20100101 Firefox/141.0',
+      },
+    });
+    const $seasonPage = load(seasonPage);
+    const episodeLinks = $seasonPage('a[href*="/episode-"]');
+    const episodeAncher = episodeLinks.filter((i, el) => {
+      const href = $seasonPage(el).attr('href');
+      if (!href) return false;
+      return href.endsWith(`/episode-${episodeNumber}`);
+    });
+
+    const episodePath = episodeAncher.attr('href');
+    if (!episodePath) throw new NotFoundError('Episode not found on season page');
+    foundUrl = `${baseUrl}${episodePath}`;
+  }
+
   const moviePage = await ctx.proxiedFetcher<string>(foundUrl, {
     headers: {
       'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:141.0) Gecko/20100101 Firefox/141.0',
