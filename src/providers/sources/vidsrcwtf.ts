@@ -1,3 +1,4 @@
+import { flags } from '@/entrypoint/utils/targets';
 import type { ShowMedia } from '@/entrypoint/utils/media';
 import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
@@ -137,9 +138,9 @@ async function scrapeShow(ctx: ShowScrapeContext): Promise<SourcererOutput> {
 
 export const vidsrcWTFScraper = makeSourcerer({
   id: 'vidsrcwtf',
-  name: 'VidSrc.WT',
+  name: 'VidSrcWT ☄️',
   rank: 179,
-  flags: [],
+  flags: [flags.CORS_ALLOWED],
   scrapeMovie,
   scrapeShow,
 });

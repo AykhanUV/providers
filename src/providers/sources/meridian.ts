@@ -146,9 +146,9 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 
 export const meridianScraper = makeSourcerer({
   id: 'meridian',
-  name: 'Meridian',
-  rank: 100,
-  flags: [],
+  name: 'Meridian 🪐',
+  rank: 500,
+  flags: [flags.CORS_ALLOWED],
   disabled: false,
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
