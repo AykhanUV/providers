@@ -15,26 +15,26 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     releaseYear: ctx.media.releaseYear,
   };
 
-  const embeds = [
-    {
-      embedId: 'madplay-base',
-      url: JSON.stringify(query),
-    },
-    {
-      embedId: 'madplay-nsapi',
-      url: JSON.stringify(query),
-    },
-    {
-      embedId: 'madplay-roper',
-      url: JSON.stringify(query),
-    },
-    {
-      embedId: 'madplay-vidfast',
-      url: JSON.stringify(query),
-    },
-  ];
-
-  return { embeds };
+  return {
+    embeds: [
+      {
+        embedId: 'madplay-base',
+        url: JSON.stringify(query),
+      },
+      {
+        embedId: 'madplay-nsapi',
+        url: JSON.stringify(query),
+      },
+      {
+        embedId: 'madplay-roper',
+        url: JSON.stringify(query),
+      },
+      {
+        embedId: 'madplay-vidfast',
+        url: JSON.stringify(query),
+      },
+    ],
+  };
 }
 
 export const madplayScraper = makeSourcerer({
