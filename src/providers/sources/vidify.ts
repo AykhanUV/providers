@@ -1,3 +1,4 @@
+import { flags } from '@/entrypoint/utils/targets';
 import { SourcererEmbed, SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 
@@ -33,7 +34,7 @@ export const vidifyScraper = makeSourcerer({
   id: 'vidify-source',
   name: 'Vidify ✨',
   rank: 155,
-  flags: [],
+  flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
 });
