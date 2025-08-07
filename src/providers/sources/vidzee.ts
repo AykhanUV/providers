@@ -31,7 +31,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 
 export const vidzeeScraper = makeSourcerer({
   id: 'vidzee',
-  name: 'Vidzee',
+  name: 'Vidzee 🐝',
   rank: 164,
   disabled: false,
   flags: [flags.CORS_ALLOWED],

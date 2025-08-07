@@ -39,8 +39,8 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 
 export const madplayScraper = makeSourcerer({
   id: 'madplay',
-  name: 'Flicky',
-  rank: 155,
+  name: 'Flicky 🍿',
+  rank: 174,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
