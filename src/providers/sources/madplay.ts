@@ -24,6 +24,14 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
       embedId: 'madplay-nsapi',
       url: JSON.stringify(query),
     },
+    {
+      embedId: 'madplay-roper',
+      url: JSON.stringify(query),
+    },
+    {
+      embedId: 'madplay-vidfast',
+      url: JSON.stringify(query),
+    },
   ];
 
   return { embeds };
