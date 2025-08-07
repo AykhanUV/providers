@@ -71,6 +71,7 @@ import {
   streamwishSpanishScraper,
 } from './embeds/streamwish';
 import { vidCloudScraper } from './embeds/vidcloud';
+import { vidifyEmbedScraper } from './embeds/vidify';
 import {
   VidsrcsuServer10Scraper,
   VidsrcsuServer11Scraper,
@@ -129,6 +130,7 @@ import { streamboxScraper } from './sources/streambox';
 import { uiraliveScraper } from './sources/uiralive';
 import { vidapiClickScraper } from './sources/vidapiclick';
 import { vidfastScraper } from './sources/vidfast';
+import { vidifyScraper } from './sources/vidify';
 import { vidzeeScraper } from './sources/vidzee';
 import { warezcdnScraper } from './sources/warezcdn';
 import { webtorScraper } from './sources/webtor';
@@ -138,6 +140,7 @@ import { xprimeScraper } from './sources/xprime';
 export function gatherAllSources(): Array<Sourcerer> {
   // all sources are gathered here
   return [
+    vidifyScraper,
     vidfastScraper,
     aetherScraper,
     cuevana3Scraper,
@@ -195,6 +198,7 @@ export function gatherAllSources(): Array<Sourcerer> {
 export function gatherAllEmbeds(): Array<Embed> {
   // all embeds are gathered here
   return [
+    vidifyEmbedScraper,
     upcloudScraper,
     vidCloudScraper,
     mixdropScraper,
