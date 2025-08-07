@@ -9,6 +9,57 @@ import { createM3U8ProxyUrl } from '@/utils/proxy';
 
 const baseUrl = 'https://movies4f.com';
 
+async function getTokens(ctx: ShowScrapeContext | MovieScrapeContext, iframeUrl: string, videoId: string) {
+  const boundary = '----geckoformboundaryc5f480bcac13a77346dab33881da6bfb';
+  const requestBody = [
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="renderer"',
+    '',
+    'ANGLE (NVIDIA, NVIDIA GeForce GTX 980 Direct3D11 vs_5_0 ps_5_0), or similar',
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="id"',
+    '',
+    '6164426f797cf4b2fe93e4b20c0a4338',
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="videoId"',
+    '',
+    videoId,
+    `--${boundary}`,
+    'Content-Disposition: form-data; name="domain"',
+    '',
+    'https://movies4f.com/',
+    `--${boundary}--`,
+  ].join('\r\n');
+
+  const tokenData = await ctx.proxiedFetcher<string>('/geturl', {
+    baseUrl: 'https://moviking.childish2x2.fun',
+    method: 'POST',
+    headers: {
+      Accept: '*/*',
+      'Content-Type': `multipart/form-data; boundary=${boundary}`,
+      Origin: 'https://moviking.childish2x2.fun',
+      Referer: iframeUrl,
+      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:141.0) Gecko/20100101 Firefox/141.0',
+      'X-Requested-With': 'XMLHttpRequest',
+    },
+    body: requestBody,
+  });
+
+  const params = new URLSearchParams(tokenData);
+  const token1 = params.get('token1');
+  const token3 = params.get('token3');
+
+  if (!token1 || !token3) {
+    throw new NotFoundError('Could not retrieve tokens');
+  }
+
+  return {
+    token1,
+    token2: params.get('token2'),
+    token3,
+  };
+}
+
 async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promise<SourcererOutput> {
   const searchResults = await ctx.proxiedFetcher<string>(`/search?q=${encodeURIComponent(ctx.media.title)}`, {
     baseUrl,
@@ -81,51 +132,20 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     throw new NotFoundError('Could not find videoId');
   }
 
-  const boundary = '----geckoformboundaryc5f480bcac13a77346dab33881da6bfb';
-  const requestBody = [
-    `--${boundary}`,
-    'Content-Disposition: form-data; name="renderer"',
-    '',
-    'ANGLE (NVIDIA, NVIDIA GeForce GTX 980 Direct3D11 vs_5_0 ps_5_0), or similar',
-    `--${boundary}`,
-    'Content-Disposition: form-data; name="id"',
-    '',
-    '6164426f797cf4b2fe93e4b20c0a4338',
-    `--${boundary}`,
-    'Content-Disposition: form-data; name="videoId"',
-    '',
-    videoId,
-    `--${boundary}`,
-    'Content-Disposition: form-data; name="domain"',
-    '',
-    'https://movies4f.com/',
-    `--${boundary}--`,
-  ].join('\r\n');
-
-  const tokenData = await ctx.proxiedFetcher<string>('/geturl', {
-    baseUrl: 'https://moviking.childish2x2.fun',
-    method: 'POST',
-    headers: {
-      Accept: '*/*',
-      'Content-Type': `multipart/form-data; boundary=${boundary}`,
-      Origin: 'https://moviking.childish2x2.fun',
-      Referer: iframeUrl,
-      'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:141.0) Gecko/20100101 Firefox/141.0',
-      'X-Requested-With': 'XMLHttpRequest',
-    },
-    body: requestBody,
-  });
-
-  const params = new URLSearchParams(tokenData);
-  const token1 = params.get('token1');
-  const token3 = params.get('token3');
-
-  if (!token1 || !token3) {
-    throw new NotFoundError('Could not retrieve tokens');
+  let tokens;
+  try {
+    tokens = await getTokens(ctx, iframeUrl, videoId);
+  } catch (err) {
+    if (err instanceof NotFoundError && err.message === 'Could not retrieve tokens') {
+      tokens = await getTokens(ctx, iframeUrl, videoId);
+    } else {
+      throw err;
+    }
   }
 
+  const { token1, token2, token3 } = tokens;
+
   const streamUrl = `https://cdn.bald241.site/segment/${videoId}/?token1=${token1}&token3=${token3}`;
-  const token2 = params.get('token2');
 
   const streamingPage = await ctx.proxiedFetcher<string>(
     `/streaming?id=${videoId}&web=movies4f.com&token1=${token1}&token2=${token2}&token3=${token3}&cdn=https://cdn2.bald241.site&lang=en`,
