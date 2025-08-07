@@ -71,7 +71,7 @@ import {
   streamwishSpanishScraper,
 } from './embeds/streamwish';
 import { vidCloudScraper } from './embeds/vidcloud';
-import { vidifyEmbedScraper } from './embeds/vidify';
+import { vidifyServer1Embed, vidifyServer8Embed } from './embeds/vidify';
 import {
   VidsrcsuServer10Scraper,
   VidsrcsuServer11Scraper,
@@ -198,7 +198,8 @@ export function gatherAllSources(): Array<Sourcerer> {
 export function gatherAllEmbeds(): Array<Embed> {
   // all embeds are gathered here
   return [
-    vidifyEmbedScraper,
+    vidifyServer1Embed,
+    vidifyServer8Embed,
     upcloudScraper,
     vidCloudScraper,
     mixdropScraper,

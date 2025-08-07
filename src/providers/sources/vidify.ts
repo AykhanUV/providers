@@ -13,14 +13,16 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     apiUrlPath = `/tv/${ctx.media.tmdbId}/season/${ctx.media.season.number}/episode/${ctx.media.episode.number}`;
   }
 
-  const embeds: SourcererEmbed[] = [];
-  for (let serverId = 1; serverId <= 11; serverId++) {
-    const fullApiUrl = `${vidifyBase}${apiUrlPath}?sr=${serverId}`;
-    embeds.push({
-      embedId: 'vidify-embed',
-      url: fullApiUrl,
-    });
-  }
+  const embeds: SourcererEmbed[] = [
+    {
+      embedId: 'vidify-1',
+      url: `${vidifyBase}${apiUrlPath}?sr=1`,
+    },
+    {
+      embedId: 'vidify-8',
+      url: `${vidifyBase}${apiUrlPath}?sr=8`,
+    },
+  ];
 
   return {
     embeds,
