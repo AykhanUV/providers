@@ -3,40 +3,35 @@ import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 
-const CDN_HOSTNAME = 'download.fedsr.us';
+const baseUrl = 'https://vidsrc.cx';
 
 async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promise<SourcererOutput> {
   const media = ctx.media;
   let path;
 
   if (media.type === 'movie') {
-    path = `/media/${media.tmdbId}/master.m3u8`;
+    path = `/embed/movie/${media.tmdbId}`;
   } else if (media.type === 'show') {
-    path = `/media/${media.tmdbId}-${media.season.number}-${media.episode.number}/master.m3u8`;
+    path = `/embed/tv/${media.tmdbId}/${media.season.number}/${media.episode.number}`;
   } else {
     throw new NotFoundError('Unsupported media type');
   }
 
-  const url = `https://${CDN_HOSTNAME}${path}`;
+  const embedUrl = `${baseUrl}${path}`;
 
-  const res = await ctx.proxiedFetcher.full(url, {
-    method: 'HEAD',
-    headers: {
-      'User-Agent':
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-    },
-  });
+  const scrapeUrl = `https://scraper.aether.mom/api/scrape?url=${encodeURIComponent(embedUrl)}&waitfor=.m3u8`;
 
-  if (res.statusCode !== 200) throw new NotFoundError('stream not found');
+  const data = await ctx.proxiedFetcher<any>(scrapeUrl);
 
-  ctx.progress(100);
+  const m3u8Url = data.requests.find((req: any) => req.url.includes('.m3u8'));
+  if (!m3u8Url) throw new NotFoundError('No m3u8 url found in response');
 
   return {
     stream: [
       {
         id: 'primary',
         type: 'hls',
-        playlist: url,
+        playlist: m3u8Url.url,
         flags: [flags.CORS_ALLOWED],
         captions: [],
       },
@@ -48,8 +43,9 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
 export const vidsrccxScraper = makeSourcerer({
   id: 'vidsrccx',
   name: 'VidSrc 🏐',
-  disabled: true,
-  rank: 173,
+  disabled: false,
+  rank: 175,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
+  scrapeShow: comboScraper,
 });
