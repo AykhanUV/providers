@@ -16,9 +16,9 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
     mediaType === 'show' ? `tv/${tmdbId}/${seasonId}/${episodeId}` : `movie/${tmdbId}`
   }`;
 
-  const scrapeUrl = `https://play-right.vercel.app/api/scrape?url=${encodeURIComponent(
+  const scrapeUrl = `https://scraper.aether.mom/api/scrape?url=${encodeURIComponent(
     playerUrl,
-  )}&clickSelector=.play-icon-main`;
+  )}&clickSelector=.play-icon-main&waitfor=.m3u8`;
 
   const data = await ctx.proxiedFetcher<any>(scrapeUrl, {
     headers: {
@@ -51,7 +51,6 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 export const videasyScraper = makeSourcerer({
   id: 'videasy',
   name: 'Videasy 🪄',
-  disabled: true,
   rank: 400,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
