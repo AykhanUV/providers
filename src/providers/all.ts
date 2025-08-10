@@ -59,7 +59,7 @@ import {
   ConsumetVidStreamingScraper,
 } from './embeds/consumet';
 import { FedAPIPrivateScraper, FedDBScraper } from './embeds/fedapi';
-import { madplayBaseEmbed, madplayNsapiEmbed } from './embeds/madplay';
+import { madplayBaseEmbed, madplayNsapiEmbed, madplayNsapiVidFastEmbed, madplayRoperEmbed } from './embeds/madplay';
 import { mp4hydraServer1Scraper, mp4hydraServer2Scraper } from './embeds/mp4hydra';
 import { ridooScraper } from './embeds/ridoo';
 import { streamtapeLatinoScraper, streamtapeScraper } from './embeds/streamtape';
@@ -71,7 +71,7 @@ import {
   streamwishSpanishScraper,
 } from './embeds/streamwish';
 import { vidCloudScraper } from './embeds/vidcloud';
-import { vidifyServer1Embed, vidifyServer8Embed } from './embeds/vidify';
+import { vidifyEmbeds } from './embeds/vidify';
 import {
   VidsrcsuServer10Scraper,
   VidsrcsuServer11Scraper,
@@ -198,8 +198,6 @@ export function gatherAllSources(): Array<Sourcerer> {
 export function gatherAllEmbeds(): Array<Embed> {
   // all embeds are gathered here
   return [
-    vidifyServer1Embed,
-    vidifyServer8Embed,
     upcloudScraper,
     vidCloudScraper,
     mixdropScraper,
@@ -280,5 +278,8 @@ export function gatherAllEmbeds(): Array<Embed> {
     vidzeeServer2Embed,
     madplayBaseEmbed,
     madplayNsapiEmbed,
+    madplayRoperEmbed,
+    madplayNsapiVidFastEmbed,
+    ...vidifyEmbeds,
   ];
 }

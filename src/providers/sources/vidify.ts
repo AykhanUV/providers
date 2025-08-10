@@ -1,37 +1,68 @@
 import { flags } from '@/entrypoint/utils/targets';
-import { SourcererEmbed, SourcererOutput, makeSourcerer } from '@/providers/base';
+import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 
-const vidifyBase = 'https://api.vidify.top';
-
 async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promise<SourcererOutput> {
-  const mediaType = ctx.media.type;
-  let apiUrlPath: string;
-
-  if (mediaType === 'movie') {
-    apiUrlPath = `/movie/${ctx.media.tmdbId}`;
-  } else {
-    apiUrlPath = `/tv/${ctx.media.tmdbId}/season/${ctx.media.season.number}/episode/${ctx.media.episode.number}`;
-  }
-
-  const embeds: SourcererEmbed[] = [
-    {
-      embedId: 'vidify-1',
-      url: `${vidifyBase}${apiUrlPath}?sr=1`,
-    },
-    {
-      embedId: 'vidify-8',
-      url: `${vidifyBase}${apiUrlPath}?sr=8`,
-    },
-  ];
+  const query = {
+    type: ctx.media.type,
+    title: ctx.media.title,
+    tmdbId: ctx.media.tmdbId,
+    imdbId: ctx.media.imdbId,
+    ...(ctx.media.type === 'show' && {
+      season: ctx.media.season.number,
+      episode: ctx.media.episode.number,
+    }),
+    releaseYear: ctx.media.releaseYear,
+  };
 
   return {
-    embeds,
+    embeds: [
+      {
+        embedId: 'vidify-alfa',
+        url: JSON.stringify(query),
+      },
+      {
+        embedId: 'vidify-bravo',
+        url: JSON.stringify(query),
+      },
+      {
+        embedId: 'vidify-charlie',
+        url: JSON.stringify(query),
+      },
+      {
+        embedId: 'vidify-delta',
+        url: JSON.stringify(query),
+      },
+      {
+        embedId: 'vidify-echo',
+        url: JSON.stringify(query),
+      },
+      {
+        embedId: 'vidify-foxtrot',
+        url: JSON.stringify(query),
+      },
+      {
+        embedId: 'vidify-golf',
+        url: JSON.stringify(query),
+      },
+      {
+        embedId: 'vidify-hotel',
+        url: JSON.stringify(query),
+      },
+      {
+        embedId: 'vidify-india',
+        url: JSON.stringify(query),
+      },
+      {
+        embedId: 'vidify-juliett',
+        url: JSON.stringify(query),
+      },
+    ],
   };
 }
 
 export const vidifyScraper = makeSourcerer({
-  id: 'vidify-source',
+  id: 'vidify',
   name: 'Vidify ✨',
   rank: 155,
   flags: [flags.CORS_ALLOWED],
