@@ -71,7 +71,7 @@ export const EightStreamScraper = makeSourcerer({
   name: '8Stream 🎱',
   rank: 111,
   flags: [],
-  disabled: false,
+  disabled: true,
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
 });
