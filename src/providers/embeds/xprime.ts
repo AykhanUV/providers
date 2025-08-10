@@ -282,7 +282,7 @@ export const xprimePhoenixEmbed = makeEmbed({
 export const xprimeFoxEmbed = makeEmbed({
   id: 'xprime-fox',
   name: 'Fox',
-  rank: 233,
+  rank: 235,
   async scrape(ctx): Promise<EmbedOutput> {
     const query = JSON.parse(ctx.url);
     const params = new URLSearchParams({
@@ -326,7 +326,7 @@ export const xprimeFoxEmbed = makeEmbed({
 export const xprimeHarbourEmbed = makeEmbed({
   id: 'xprime-harbour',
   name: 'Harbour',
-  rank: 232,
+  rank: 234,
   async scrape(ctx): Promise<EmbedOutput> {
     const query = JSON.parse(ctx.url);
     const params = new URLSearchParams({
@@ -373,7 +373,7 @@ export const xprimeHarbourEmbed = makeEmbed({
 export const xprimeFendiEmbed = makeEmbed({
   id: 'xprime-fendi',
   name: 'Fendi',
-  rank: 231,
+  rank: 233,
   async scrape(ctx): Promise<EmbedOutput> {
     const query = JSON.parse(ctx.url);
     let url = `${fendiBaseUrl}?id=${query.tmdbId}`;
@@ -407,7 +407,7 @@ export const xprimeFendiEmbed = makeEmbed({
 export const xprimeMarantEmbed = makeEmbed({
   id: 'xprime-marant',
   name: 'Marant (French + English)',
-  rank: 230,
+  rank: 232,
   async scrape(ctx): Promise<EmbedOutput> {
     const query = JSON.parse(ctx.url);
     let url = `${marantBaseUrl}?id=${query.tmdbId}`;
@@ -441,7 +441,7 @@ export const xprimeMarantEmbed = makeEmbed({
 export const xprimeVolkswagenEmbed = makeEmbed({
   id: 'xprime-volkswagen',
   name: 'Volkswagen (German)',
-  rank: 229,
+  rank: 231,
   async scrape(ctx): Promise<EmbedOutput> {
     const query = JSON.parse(ctx.url);
     let url = `${volkswagenBaseUrl}?name=${query.title}`;
