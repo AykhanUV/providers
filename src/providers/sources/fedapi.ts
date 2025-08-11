@@ -51,10 +51,12 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
       ? `${BASE_URL}/movie/${ctx.media.imdbId}`
       : `${BASE_URL}/tv/${ctx.media.imdbId}/${ctx.media.season.number}/${ctx.media.episode.number}`;
 
-  const data = await ctx.fetcher<any>(url, {
+  const data = await ctx.proxiedFetcher<any>(url, {
     headers: {
       'ui-token': userToken,
       region: normalizeRegion(region),
+      Origin: 'https://pstream.mov',
+      Referer: 'https://pstream.mov',
     },
   });
 
