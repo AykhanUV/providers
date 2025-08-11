@@ -133,24 +133,33 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   }
 
   let tokens;
-  try {
-    tokens = await getTokens(ctx, iframeUrl, videoId);
-  } catch (err) {
-    if (err instanceof NotFoundError && err.message === 'Could not retrieve tokens') {
+  for (let i = 0; i < 3; i += 1) {
+    try {
       tokens = await getTokens(ctx, iframeUrl, videoId);
-    } else {
+      break;
+    } catch (err) {
+      if (err instanceof NotFoundError && err.message === 'Could not retrieve tokens' && i < 2) {
+        continue;
+      }
       throw err;
     }
   }
 
+  if (!tokens) {
+    throw new NotFoundError('Could not retrieve tokens after 3 attempts');
+  }
+
   const { token1, token2, token3 } = tokens;
 
-  const streamUrl = `https://cdn.bald241.site/segment/${videoId}/?token1=${token1}&token3=${token3}`;
+  const cdnDomain = ctx.media.type === 'movie' ? 'https://cdn.bald241.site' : 'https://cdn.ketquaxoso.icu';
+  const cdnDomain2 = ctx.media.type === 'movie' ? 'https://cdn2.bald241.site' : 'https://cdn.ketquaxoso.icu';
+
+  const streamUrl = `${cdnDomain}/segment/${videoId}/?token1=${token1}&token3=${token3}`;
 
   const streamingPage = await ctx.proxiedFetcher<string>(
-    `/streaming?id=${videoId}&web=movies4f.com&token1=${token1}&token2=${token2}&token3=${token3}&cdn=https://cdn2.bald241.site&lang=en`,
+    `/streaming?id=${videoId}&web=movies4f.com&token1=${token1}&token2=${token2}&token3=${token3}&cdn=${cdnDomain2}&lang=en`,
     {
-      baseUrl: 'https://cdn2.bald241.site',
+      baseUrl: cdnDomain2,
       headers: {
         Referer: 'https://moviking.childish2x2.fun/',
       },
@@ -169,7 +178,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
       if (!language) return null;
       return {
         id: track.file,
-        url: track.file,
+        url: track.file.replace('https://cdn.bald241.site', cdnDomain),
         type: 'vtt',
         language,
         hasCorsRestrictions: true,
@@ -184,7 +193,10 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
       {
         id: 'primary',
         type: 'hls',
-        playlist: createM3U8ProxyUrl(streamUrl),
+        playlist: createM3U8ProxyUrl(streamUrl, {
+          Origin: cdnDomain,
+          Referer: `${cdnDomain}/`,
+        }),
         flags: [flags.CORS_ALLOWED],
         captions,
       },
