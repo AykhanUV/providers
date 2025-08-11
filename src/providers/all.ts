@@ -139,6 +139,7 @@ import { webtorScraper } from './sources/webtor';
 import { wecimaScraper } from './sources/wecima';
 import { xprimeScraper } from './sources/xprime';
 import { zunimeScraper } from './sources/zunime';
+import { ciaapiScraper } from './sources/cia';
 
 export function gatherAllSources(): Array<Sourcerer> {
   // all sources are gathered here
@@ -146,6 +147,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     vidifyScraper,
     vidfastScraper,
     aetherScraper,
+    ciaapiScraper,
     cuevana3Scraper,
     catflixScraper,
     ridooMoviesScraper,

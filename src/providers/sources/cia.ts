@@ -1,0 +1,171 @@
+import { flags } from '@/entrypoint/utils/targets';
+import { makeSourcerer, SourcererOutput } from '@/providers/base';
+import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
+import { NotFoundError } from '@/utils/errors';
+
+const getUserToken = (): string | null => {
+  try {
+    if (typeof window === 'undefined') return null;
+    const preferences = window.localStorage.getItem('__MW::preferences');
+    if (!preferences) return null;
+    const parsed = JSON.parse(preferences);
+    return parsed?.state?.febboxKey || null;
+  } catch (err) {
+    console.warn('Unable to access localStorage or parse auth data:', err);
+    return null;
+  }
+};
+
+const getRegion = (): string | null => {
+  try {
+    if (typeof window === 'undefined') return null;
+    const regionData = window.localStorage.getItem('__MW::region');
+    if (!regionData) return null;
+    const parsed = JSON.parse(regionData);
+    return parsed?.state?.region ?? null;
+  } catch (err) {
+    console.warn('Unable to access localStorage or parse auth data:', err);
+    return null;
+  }
+};
+
+const getBaseUrl = (): string => {
+  const region = getRegion();
+  switch (region) {
+    case 'us-east':
+      return 'https://febbox.andresdev.org';
+    case 'us-west':
+      return 'https://febbox.andresdev.org';
+    case 'south-america':
+      return 'https://febbox2.andresdev.org';
+    case 'asia':
+      return 'https://febbox2.andresdev.org';
+    case 'europe':
+      return 'https://febbox2.andresdev.org';
+    default:
+      return 'https://febbox.andresdev.org';
+  }
+};
+
+const BASE_URL = getBaseUrl();
+
+async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promise<SourcererOutput> {
+  const userToken = getUserToken();
+  if (!userToken) throw new NotFoundError('Requires a user token!');
+
+  const url =
+    ctx.media.type === 'movie'
+      ? `${BASE_URL}/movie/${ctx.media.tmdbId}`
+      : `${BASE_URL}/tv/${ctx.media.tmdbId}/season/${ctx.media.season.number}/episode/${ctx.media.episode.number}`;
+
+  const headers: Record<string, string> = {};
+  headers['ui-token'] = userToken;
+
+  const data = await ctx.fetcher<any>(url, {
+    headers: Object.keys(headers).length > 0 ? headers : undefined,
+  });
+
+  if (data?.error && data.error.startsWith('No results found')) {
+    throw new NotFoundError('No stream found');
+  }
+  if (data?.error === 'No cached data found for this episode') {
+    throw new NotFoundError('No stream found');
+  }
+  if (data?.error === 'No cached data found for this ID') {
+    throw new NotFoundError('No stream found');
+  }
+  if (!data) throw new NotFoundError('No response from API');
+
+  ctx.progress(50);
+
+  if (!data.sources || !Array.isArray(data.sources) || data.sources.length === 0) {
+    throw new NotFoundError('No streams data found in response');
+  }
+
+  const streams = data.sources.reduce((acc: Record<string, string>, source: any) => {
+    const qualityLabel = source.label;
+    const fileUrl = source.file;
+
+    if (fileUrl.includes('/video/vip_only.mp4')) {
+      return acc;
+    }
+
+    let qualityKey: number;
+    if (qualityLabel === 'ORG[HDR]' || qualityLabel === 'ORG') {
+      if (fileUrl.split('?')[0].toLowerCase().endsWith('.mp4')) {
+        acc.unknown = fileUrl;
+      }
+      return acc;
+    }
+    if (qualityLabel === '4K') {
+      qualityKey = 2160;
+    } else {
+      qualityKey = parseInt(qualityLabel.replace('P', ''), 10);
+    }
+    if (Number.isNaN(qualityKey) || acc[qualityKey]) return acc;
+    acc[qualityKey] = fileUrl;
+    return acc;
+  }, {});
+
+  ctx.progress(90);
+
+  return {
+    embeds: [],
+    stream: [
+      {
+        id: 'primary',
+        captions: [],
+        qualities: {
+          ...(streams[2160] && {
+            '4k': {
+              type: 'mp4',
+              url: streams[2160],
+            },
+          }),
+          ...(streams[1080] && {
+            '1080': {
+              type: 'mp4',
+              url: streams[1080],
+            },
+          }),
+          ...(streams[720] && {
+            '720': {
+              type: 'mp4',
+              url: streams[720],
+            },
+          }),
+          ...(streams[480] && {
+            '480': {
+              type: 'mp4',
+              url: streams[480],
+            },
+          }),
+          ...(streams[360] && {
+            '360': {
+              type: 'mp4',
+              url: streams[360],
+            },
+          }),
+          ...(streams.unknown && {
+            unknown: {
+              type: 'mp4',
+              url: streams.unknown,
+            },
+          }),
+        },
+        type: 'file',
+        flags: [flags.CORS_ALLOWED],
+      },
+    ],
+  };
+}
+
+export const ciaapiScraper = makeSourcerer({
+  id: 'cia-api',
+  name: 'CIA API (4K) 🔥',
+  rank: 251,
+  disabled: !getUserToken(),
+  flags: [flags.CORS_ALLOWED],
+  scrapeMovie: comboScraper,
+  scrapeShow: comboScraper,
+});
