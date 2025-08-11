@@ -30,8 +30,6 @@ import { vidsrcsuScraper } from '@/providers/sources/vidsrcsu';
 import { vidsrcvipScraper } from '@/providers/sources/vidsrcvip';
 import { vidsrcWTFScraper } from '@/providers/sources/vidsrcwtf';
 import { vixsrcScraper } from '@/providers/sources/vixsrc';
-import { rgshowsScraper } from './sources/rgshows';
-import { zunimeEmbeds } from './embeds/zunime';
 import { zoechipScraper } from '@/providers/sources/zoechip';
 
 import {
@@ -106,6 +104,7 @@ import {
   xprimeStreamboxEmbed,
   xprimeVolkswagenEmbed,
 } from './embeds/xprime';
+import { zunimeEmbeds } from './embeds/zunime';
 import { oneServerScraper } from './sources/1server';
 import { EightStreamScraper } from './sources/8stream';
 import { animeflvScraper } from './sources/animeflv';
@@ -124,6 +123,7 @@ import { iosmirrorPVScraper } from './sources/iosmirrorpv';
 import { madplayScraper } from './sources/madplay';
 import { nunflixScraper } from './sources/nunflix';
 import { oneroomScraper } from './sources/oneroom';
+import { rgshowsScraper } from './sources/rgshows';
 import { ridooMoviesScraper } from './sources/ridomovies';
 import { sezonlukdiziScraper } from './sources/sezonlukdizi';
 import { slidemoviesScraper } from './sources/slidemovies';

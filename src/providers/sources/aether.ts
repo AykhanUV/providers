@@ -58,7 +58,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 export const aetherScraper = makeSourcerer({
   id: 'aether',
   name: 'Aether 💫',
-  rank: 169,
+  rank: 120,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
