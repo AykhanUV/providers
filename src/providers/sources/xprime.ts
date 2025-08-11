@@ -25,7 +25,15 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
       url: JSON.stringify(query),
     },
     {
+      embedId: 'xprime-fox',
+      url: JSON.stringify(query),
+    },
+    {
       embedId: 'xprime-primenet',
+      url: JSON.stringify(query),
+    },
+    {
+      embedId: 'xprime-kraken',
       url: JSON.stringify(query),
     },
     {
@@ -33,7 +41,11 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
       url: JSON.stringify(query),
     },
     {
-      embedId: 'xprime-fox',
+      embedId: 'xprime-harbour',
+      url: JSON.stringify(query),
+    },
+    {
+      embedId: 'xprime-rage',
       url: JSON.stringify(query),
     },
     {
@@ -56,8 +68,8 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 export const xprimeScraper = makeSourcerer({
   id: 'xprimetv',
   name: 'XPrime 💣',
-  rank: 250,
-  disabled: true,
+  rank: 244,
+  disabled: false,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
