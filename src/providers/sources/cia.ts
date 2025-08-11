@@ -58,11 +58,14 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
       ? `${BASE_URL}/movie/${ctx.media.tmdbId}`
       : `${BASE_URL}/tv/${ctx.media.tmdbId}/season/${ctx.media.season.number}/episode/${ctx.media.episode.number}`;
 
-  const headers: Record<string, string> = {};
+  const headers: Record<string, string> = {
+    Origin: 'https://pstream.mov',
+    Referer: 'https://pstream.mov',
+  };
   headers['ui-token'] = userToken;
 
   const data = await ctx.fetcher<any>(url, {
-    headers: Object.keys(headers).length > 0 ? headers : undefined,
+    headers,
   });
 
   if (data?.error && data.error.startsWith('No results found')) {
