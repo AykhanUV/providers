@@ -4,16 +4,7 @@ import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 
 const getUserToken = (): string | null => {
-  try {
-    if (typeof window === 'undefined') return null;
-    const preferences = window.localStorage.getItem('__MW::preferences');
-    if (!preferences) return null;
-    const parsed = JSON.parse(preferences);
-    return parsed?.state?.febboxKey || null;
-  } catch (err) {
-    console.warn('Unable to access localStorage or parse auth data:', err);
-    return null;
-  }
+  return 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3NDI5OTc4MTksIm5iZiI6MTc0Mjk5NzgxOSwiZXhwIjoxNzc0MTAxODM5LCJkYXRhIjp7InVpZCI6Njk2MzU5LCJ0b2tlbiI6IjUzNmNiZjI2NzA0Zjk4MjAxMjBiYjY4OTRlNjBmMmI2In19.RC8T4zyxxikVtuuEIxbYhYK8T_REhIcnC8AYzoS3jKY';
 };
 
 const getRegion = (): string | null => {
@@ -167,7 +158,7 @@ export const ciaapiScraper = makeSourcerer({
   id: 'cia-api',
   name: 'CIA API (4K) 🔥',
   rank: 251,
-  disabled: !getUserToken(),
+  disabled: false,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
