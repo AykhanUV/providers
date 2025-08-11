@@ -30,6 +30,7 @@ import { vidsrcsuScraper } from '@/providers/sources/vidsrcsu';
 import { vidsrcvipScraper } from '@/providers/sources/vidsrcvip';
 import { vidsrcWTFScraper } from '@/providers/sources/vidsrcwtf';
 import { vixsrcScraper } from '@/providers/sources/vixsrc';
+import { rgshowsScraper } from './sources/rgshows';
 import { zunimeEmbeds } from './embeds/zunime';
 import { zoechipScraper } from '@/providers/sources/zoechip';
 
@@ -189,6 +190,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     filmekseniScraper,
     vidsrcvipScraper,
     vidsrcWTFScraper,
+    rgshowsScraper,
     sezonlukdiziScraper,
     videasyScraper,
     vidzeeScraper,
