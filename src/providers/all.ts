@@ -98,9 +98,11 @@ import {
   xprimeFendiEmbed,
   xprimeFoxEmbed,
   xprimeHarbourEmbed,
+  xprimeKrakenEmbed,
   xprimeMarantEmbed,
   xprimePhoenixEmbed,
   xprimePrimenetEmbed,
+  xprimeRageEmbed,
   xprimeStreamboxEmbed,
   xprimeVolkswagenEmbed,
 } from './embeds/xprime';
@@ -108,6 +110,7 @@ import { zunimeEmbeds } from './embeds/zunime';
 import { oneServerScraper } from './sources/1server';
 import { EightStreamScraper } from './sources/8stream';
 import { animeflvScraper } from './sources/animeflv';
+import { ciaapiScraper } from './sources/cia';
 import { cinemaosScraper } from './sources/cinemaos';
 import { coitusScraper } from './sources/coitus';
 import { ConsumetScraper } from './sources/consumet';
@@ -139,7 +142,6 @@ import { webtorScraper } from './sources/webtor';
 import { wecimaScraper } from './sources/wecima';
 import { xprimeScraper } from './sources/xprime';
 import { zunimeScraper } from './sources/zunime';
-import { ciaapiScraper } from './sources/cia';
 
 export function gatherAllSources(): Array<Sourcerer> {
   // all sources are gathered here
@@ -253,6 +255,8 @@ export function gatherAllEmbeds(): Array<Embed> {
     xprimeVolkswagenEmbed,
     xprimeHarbourEmbed,
     xprimePhoenixEmbed,
+    xprimeRageEmbed,
+    xprimeKrakenEmbed,
     ConsumetVidCloudScraper,
     ConsumetStreamSBScraper,
     ConsumetVidStreamingScraper,

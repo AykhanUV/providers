@@ -1,5 +1,5 @@
 import { flags } from '@/entrypoint/utils/targets';
-import { makeSourcerer, SourcererOutput } from '@/providers/base';
+import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 
@@ -157,7 +157,7 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
 export const ciaapiScraper = makeSourcerer({
   id: 'cia-api',
   name: 'CIA API (4K) 🔥',
-  rank: 251,
+  rank: 890,
   disabled: false,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,

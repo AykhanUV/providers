@@ -102,7 +102,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
 export const sezonlukdiziScraper = makeSourcerer({
   id: 'sezonlukdizi',
   name: 'SzDizi 🍭(Turkish)',
-  rank: 300,
+  rank: 830,
   flags: [flags.CORS_ALLOWED],
   scrapeShow: comboScraper,
 });

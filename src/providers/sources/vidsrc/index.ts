@@ -114,7 +114,7 @@ async function vidsrcScrape(ctx: MovieScrapeContext | ShowScrapeContext): Promis
 export const vidsrcScraper = makeSourcerer({
   id: 'cloudnestra',
   name: 'Cloudnestra ⚡️',
-  rank: 180,
+  rank: 880,
   flags: [],
   scrapeMovie: vidsrcScrape,
   scrapeShow: vidsrcScrape,

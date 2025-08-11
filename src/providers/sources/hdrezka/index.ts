@@ -174,7 +174,7 @@ const universalScraper = async (ctx: ShowScrapeContext | MovieScrapeContext): Pr
 export const hdRezkaScraper = makeSourcerer({
   id: 'hdrezka',
   name: 'HDRezka 🪼',
-  rank: 189,
+  rank: 870,
   flags: [flags.CORS_ALLOWED, flags.IP_LOCKED],
   scrapeShow: universalScraper,
   scrapeMovie: universalScraper,

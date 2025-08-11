@@ -57,7 +57,7 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
 export const vixsrcScraper = makeSourcerer({
   id: 'vixsrc',
   name: 'VixSrc ⚙️(Italian)',
-  rank: 172,
+  rank: 790,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,

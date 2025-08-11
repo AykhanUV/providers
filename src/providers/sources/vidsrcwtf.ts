@@ -139,7 +139,7 @@ async function scrapeShow(ctx: ShowScrapeContext): Promise<SourcererOutput> {
 export const vidsrcWTFScraper = makeSourcerer({
   id: 'vidsrcwtf',
   name: 'VidSrcWT ☄️',
-  rank: 179,
+  rank: 800,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie,
   scrapeShow,
