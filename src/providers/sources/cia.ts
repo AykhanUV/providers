@@ -64,7 +64,7 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
   };
   headers['ui-token'] = userToken;
 
-  const data = await ctx.fetcher<any>(url, {
+  const data = await ctx.proxiedFetcher<any>(url, {
     headers,
   });
 
