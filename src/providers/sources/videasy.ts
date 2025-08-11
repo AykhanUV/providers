@@ -52,6 +52,7 @@ export const videasyScraper = makeSourcerer({
   id: 'videasy',
   name: 'Videasy 🪄',
   rank: 820,
+  disabled: true,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
   scrapeShow: comboScraper,
