@@ -55,7 +55,7 @@ query ($search: String, $type: MediaType) {
 }
 `;
 
-export async function getMalIdFromMedia(ctx: ScrapeContext, media: MovieMedia | ShowMedia): Promise<number> {
+export async function getAnilistIdFromMedia(ctx: ScrapeContext, media: MovieMedia | ShowMedia): Promise<number> {
   const key = `${media.type}:${media.title}:${media.releaseYear}`;
   const cached = cache.get(key);
   if (cached) return cached;

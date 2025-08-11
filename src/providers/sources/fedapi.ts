@@ -1,5 +1,5 @@
 import { flags } from '@/entrypoint/utils/targets';
-import { makeSourcerer, SourcererOutput } from '@/providers/base';
+import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { labelToLanguageCode } from '@/providers/captions';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';

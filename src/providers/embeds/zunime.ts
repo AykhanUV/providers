@@ -21,13 +21,13 @@ export function makeZunimeEmbed(id: string, rank: number = 100) {
       const serverName = id as (typeof ZUNIME_SERVERS)[number];
 
       const query = JSON.parse(ctx.url);
-      const { malId, episode } = query;
+      const { anilistId, episode } = query;
 
       const res = await ctx.proxiedFetcher(`${'/sources'}`, {
         baseUrl,
         headers,
         query: {
-          id: String(malId),
+          id: String(anilistId),
           ep: String(episode ?? 1),
           host: serverName,
           type: 'dub',

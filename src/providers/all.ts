@@ -43,6 +43,7 @@ import {
   oneServerPrimeboxEmbed,
   oneServerVidsrcsuEmbed,
 } from './embeds/1server';
+import { animetsuScraper } from './embeds/animetsu';
 import {
   autoembedBengaliScraper,
   autoembedEnglishScraper,
@@ -109,6 +110,7 @@ import { zunimeEmbeds } from './embeds/zunime';
 import { oneServerScraper } from './sources/1server';
 import { EightStreamScraper } from './sources/8stream';
 import { animeflvScraper } from './sources/animeflv';
+import { AnimetsuEmbeds } from './sources/animetsu';
 import { ciaapiScraper } from './sources/cia';
 import { cinemaosScraper } from './sources/cinemaos';
 import { coitusScraper } from './sources/coitus';
@@ -200,6 +202,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     meridianScraper,
     madplayScraper,
     zunimeScraper,
+    animetsuScraper,
   ];
 }
 
@@ -289,6 +292,7 @@ export function gatherAllEmbeds(): Array<Embed> {
     madplayRoperEmbed,
     madplayNsapiVidFastEmbed,
     ...vidifyEmbeds,
+    ...AnimetsuEmbeds,
     ...zunimeEmbeds,
   ];
 }

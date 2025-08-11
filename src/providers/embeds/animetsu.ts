@@ -22,29 +22,33 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   return {
     embeds: [
       {
-        embedId: 'zunime-hd-2',
+        embedId: 'animetsu-pahe',
         url: JSON.stringify(query),
       },
       {
-        embedId: 'zunime-miko',
+        embedId: 'animetsu-zoro',
         url: JSON.stringify(query),
       },
       {
-        embedId: 'zunime-shiro',
+        embedId: 'animetsu-zaza',
         url: JSON.stringify(query),
       },
       {
-        embedId: 'zunime-zaza',
+        embedId: 'animetsu-meg',
+        url: JSON.stringify(query),
+      },
+      {
+        embedId: 'animetsu-bato',
         url: JSON.stringify(query),
       },
     ],
   };
 }
 
-export const zunimeScraper = makeSourcerer({
-  id: 'zunime',
-  name: 'Zunime ⛩️',
-  rank: 125,
+export const animetsuScraper = makeSourcerer({
+  id: 'animetsu',
+  name: 'Animetsu 🏯',
+  rank: 112,
   flags: [],
   scrapeShow: comboScraper,
 });
