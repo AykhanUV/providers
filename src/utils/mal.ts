@@ -1,20 +1,24 @@
 import { MovieMedia, ShowMedia } from '@/entrypoint/utils/media';
 import { ScrapeContext } from '@/utils/context';
 
-type JikanAnime = {
-  mal_id: number;
-  type?: string;
-  title?: string;
-  title_english?: string | null;
-  titles?: Array<{ title: string; type: string }>;
-  year?: number | null;
-  aired?: {
-    prop?: { from?: { year?: number | null } };
+type AnilistMedia = {
+  id: number;
+  type: 'ANIME' | 'MANGA';
+  format: 'TV' | 'TV_SHORT' | 'MOVIE' | 'SPECIAL' | 'OVA' | 'ONA' | 'MUSIC' | 'MANGA' | 'NOVEL' | 'ONE_SHOT';
+  seasonYear?: number;
+  title: {
+    romaji: string;
+    english?: string;
+    native?: string;
   };
 };
 
-type JikanSearchResponse = {
-  data: JikanAnime[];
+type AnilistSearchResponse = {
+  data: {
+    Page: {
+      media: AnilistMedia[];
+    };
+  };
 };
 
 const cache = new Map<string, number>();
@@ -26,55 +30,69 @@ function normalizeTitle(t: string) {
     .trim();
 }
 
-function guessYear(a: JikanAnime): number | null {
-  return (typeof a.year === 'number' ? a.year : null) ?? a.aired?.prop?.from?.year ?? null;
+function matchesType(mediaType: 'show' | 'movie', anilist: AnilistMedia) {
+  if (mediaType === 'show') {
+    return ['TV', 'TV_SHORT', 'OVA', 'ONA', 'SPECIAL'].includes(anilist.format);
+  }
+  return anilist.format === 'MOVIE';
 }
 
-function matchesType(mediaType: 'show' | 'movie', t?: string) {
-  if (!t) return true; // be lenient
-  const jt = t.toLowerCase();
-  return mediaType === 'show' ? jt === 'tv' : jt === 'movie';
+const anilistQuery = `
+query ($search: String, $type: MediaType) {
+  Page(page: 1, perPage: 20) {
+    media(search: $search, type: $type, sort: POPULARITY_DESC) {
+      id
+      type
+      format
+      seasonYear
+      title {
+        romaji
+        english
+        native
+      }
+    }
+  }
 }
+`;
 
 export async function getMalIdFromMedia(ctx: ScrapeContext, media: MovieMedia | ShowMedia): Promise<number> {
   const key = `${media.type}:${media.title}:${media.releaseYear}`;
   const cached = cache.get(key);
   if (cached) return cached;
 
-  const q = media.title;
-  // Jikan search
-  const res = await ctx.proxiedFetcher<JikanSearchResponse>('/anime', {
-    baseUrl: 'https://api.jikan.moe/v4',
-    query: {
-      q,
-      // Jikan expects tv|movie etc; provide a hint but still filter manually
-      type: media.type === 'show' ? 'tv' : 'movie',
-      sfw: 'true',
-      limit: '20',
-      order_by: 'popularity',
-      sort: 'asc',
+  const res = await ctx.proxiedFetcher<AnilistSearchResponse>('', {
+    baseUrl: 'https://graphql.anilist.co',
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Accept: 'application/json',
     },
+    body: JSON.stringify({
+      query: anilistQuery,
+      variables: {
+        search: media.title,
+        type: 'ANIME',
+      },
+    }),
   });
 
-  const items = Array.isArray(res?.data) ? res.data : [];
+  const items = res.data?.Page?.media ?? [];
   if (!items.length) {
-    throw new Error('MAL id not found');
+    throw new Error('AniList id not found');
   }
 
   const targetTitle = normalizeTitle(media.title);
 
-  // Score results by title similarity and year closeness
   const scored = items
-    .filter((it) => matchesType(media.type, it.type))
+    .filter((it) => matchesType(media.type, it))
     .map((it) => {
-      const titles: string[] = [it.title || ''];
-      if (it.title_english) titles.push(it.title_english);
-      if (Array.isArray(it.titles)) titles.push(...it.titles.map((t) => t.title));
+      const titles: string[] = [it.title.romaji];
+      if (it.title.english) titles.push(it.title.english);
+      if (it.title.native) titles.push(it.title.native);
       const normTitles = titles.map(normalizeTitle).filter(Boolean);
       const exact = normTitles.includes(targetTitle);
       const partial = normTitles.some((t) => t.includes(targetTitle) || targetTitle.includes(t));
-      const y = guessYear(it);
-      const yearDelta = typeof y === 'number' ? Math.abs(y - media.releaseYear) : 5; // unknown year => penalize
+      const yearDelta = it.seasonYear ? Math.abs(it.seasonYear - media.releaseYear) : 5;
       let score = 0;
       if (exact) score += 100;
       else if (partial) score += 50;
@@ -84,9 +102,9 @@ export async function getMalIdFromMedia(ctx: ScrapeContext, media: MovieMedia | 
     .sort((a, b) => b.score - a.score);
 
   const winner = scored[0]?.it ?? items[0];
-  const malId = winner?.mal_id;
-  if (!malId) throw new Error('MAL id not found');
+  const anilistId = winner?.id;
+  if (!anilistId) throw new Error('AniList id not found');
 
-  cache.set(key, malId);
-  return malId;
+  cache.set(key, anilistId);
+  return anilistId;
 }
