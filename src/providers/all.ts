@@ -30,6 +30,7 @@ import { vidsrcsuScraper } from '@/providers/sources/vidsrcsu';
 import { vidsrcvipScraper } from '@/providers/sources/vidsrcvip';
 import { vidsrcWTFScraper } from '@/providers/sources/vidsrcwtf';
 import { vixsrcScraper } from '@/providers/sources/vixsrc';
+import { zunimeEmbeds } from './embeds/zunime';
 import { zoechipScraper } from '@/providers/sources/zoechip';
 
 import {
@@ -136,6 +137,7 @@ import { warezcdnScraper } from './sources/warezcdn';
 import { webtorScraper } from './sources/webtor';
 import { wecimaScraper } from './sources/wecima';
 import { xprimeScraper } from './sources/xprime';
+import { zunimeScraper } from './sources/zunime';
 
 export function gatherAllSources(): Array<Sourcerer> {
   // all sources are gathered here
@@ -192,6 +194,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     vidzeeScraper,
     meridianScraper,
     madplayScraper,
+    zunimeScraper,
   ];
 }
 
@@ -281,5 +284,6 @@ export function gatherAllEmbeds(): Array<Embed> {
     madplayRoperEmbed,
     madplayNsapiVidFastEmbed,
     ...vidifyEmbeds,
+    ...zunimeEmbeds,
   ];
 }
