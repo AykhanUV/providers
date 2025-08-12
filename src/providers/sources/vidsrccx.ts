@@ -43,7 +43,7 @@ async function comboScraper(ctx: MovieScrapeContext | ShowScrapeContext): Promis
 export const vidsrccxScraper = makeSourcerer({
   id: 'vidsrccx',
   name: 'VidSrc 🏐',
-  disabled: false,
+  disabled: true,
   rank: 175,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie: comboScraper,
