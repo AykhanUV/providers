@@ -1,4 +1,5 @@
 import { SourcererOutput, makeSourcerer } from '@/providers/base';
+import { flags } from '@/entrypoint/utils/targets';
 import { getAnilistIdFromMedia } from '@/utils/anilist';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 
@@ -49,6 +50,6 @@ export const animetsuScraper = makeSourcerer({
   id: 'animetsu',
   name: 'Animetsu 🏯',
   rank: 112,
-  flags: [],
+  flags: [flags.CORS_ALLOWED],
   scrapeShow: comboScraper,
 });

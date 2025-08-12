@@ -1,5 +1,7 @@
 /* eslint-disable no-console */
 import { NotFoundError } from '@/utils/errors';
+import { createM3U8ProxyUrl } from '@/utils/proxy';
+import { flags } from '@/entrypoint/utils/targets';
 
 import { EmbedOutput, makeEmbed } from '../base';
 
@@ -82,12 +84,12 @@ export function makeAnimetsuEmbed(id: string, rank: number = 100) {
               qualities: {
                 [qualityKey]: {
                   type: 'mp4',
-                  url: streamUrl,
+                  url: createM3U8ProxyUrl(streamUrl, streamHeaders),
                 },
               },
               type: 'file',
               headers: streamHeaders,
-              flags: [],
+              flags: [flags.CORS_ALLOWED],
             },
           ],
         };
@@ -98,9 +100,9 @@ export function makeAnimetsuEmbed(id: string, rank: number = 100) {
           {
             id: 'primary',
             type: 'hls',
-            playlist: streamUrl,
+            playlist: createM3U8ProxyUrl(streamUrl, streamHeaders),
             headers: streamHeaders,
-            flags: [],
+            flags: [flags.CORS_ALLOWED],
             captions: [],
           },
         ],
