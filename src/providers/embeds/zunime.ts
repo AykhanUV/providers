@@ -1,4 +1,6 @@
 import { NotFoundError } from '@/utils/errors';
+import { createM3U8ProxyUrl } from '@/utils/proxy';
+import { flags } from '@/entrypoint/utils/targets';
 
 import { EmbedOutput, makeEmbed } from '../base';
 
@@ -51,9 +53,9 @@ export function makeZunimeEmbed(id: string, rank: number = 100) {
           {
             id: 'primary',
             type: 'hls',
-            playlist: `https://proxy-2.madaraverse.online/proxy?url=${encodeURIComponent(streamUrl)}`,
+            playlist: createM3U8ProxyUrl(`https://proxy-2.madaraverse.online/proxy?url=${encodeURIComponent(streamUrl)}`, upstreamHeaders),
             headers: upstreamHeaders,
-            flags: [],
+            flags: [flags.CORS_ALLOWED],
             captions: [],
           },
         ],

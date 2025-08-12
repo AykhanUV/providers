@@ -1,4 +1,5 @@
 import { SourcererOutput, makeSourcerer } from '@/providers/base';
+import { flags } from '@/entrypoint/utils/targets';
 import { getAnilistIdFromMedia } from '@/utils/anilist';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 
@@ -45,6 +46,6 @@ export const zunimeScraper = makeSourcerer({
   id: 'zunime',
   name: 'Zunime ⛩️',
   rank: 125,
-  flags: [],
+  flags: [flags.CORS_ALLOWED],
   scrapeShow: comboScraper,
 });
