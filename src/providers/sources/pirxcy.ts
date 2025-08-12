@@ -3,7 +3,7 @@ import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
 
-const baseUrl = 'https://mbp.pirxcy.dev';
+const baseUrl = 'https://mbpdev.pirxcy.dev';
 
 function buildQualitiesFromStreams(data: {
   list: Array<{ path: string; quality: string; real_quality: string; format: string }>;
@@ -180,9 +180,9 @@ async function scrapeShow(ctx: ShowScrapeContext): Promise<SourcererOutput> {
 
 export const pirxcyScraper = makeSourcerer({
   id: 'pirxcy',
-  name: 'Pirxcy 🪐',
-  rank: 230,
-  disabled: true,
+  name: 'Pirxcy 🕷️',
+  rank: 891,
+  disabled: false,
   flags: [flags.CORS_ALLOWED],
   scrapeMovie,
   scrapeShow,
