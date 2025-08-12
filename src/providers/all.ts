@@ -125,6 +125,7 @@ import { hollymoviehdScraper } from './sources/hollymoviehd';
 import { iosmirrorScraper } from './sources/iosmirror';
 import { iosmirrorPVScraper } from './sources/iosmirrorpv';
 import { madplayScraper } from './sources/madplay';
+import { mappleTvScraper } from './sources/mappletv';
 import { nunflixScraper } from './sources/nunflix';
 import { oneroomScraper } from './sources/oneroom';
 import { rgshowsScraper } from './sources/rgshows';
@@ -203,6 +204,7 @@ export function gatherAllSources(): Array<Sourcerer> {
     madplayScraper,
     zunimeScraper,
     animetsuScraper,
+    mappleTvScraper,
   ];
 }
 
