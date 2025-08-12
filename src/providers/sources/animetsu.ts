@@ -1,5 +1,5 @@
-import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { flags } from '@/entrypoint/utils/targets';
+import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { getAnilistIdFromMedia } from '@/utils/anilist';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 

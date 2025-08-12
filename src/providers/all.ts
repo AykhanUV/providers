@@ -43,7 +43,7 @@ import {
   oneServerPrimeboxEmbed,
   oneServerVidsrcsuEmbed,
 } from './embeds/1server';
-import { animetsuScraper } from './sources/animetsu';
+import { AnimetsuEmbeds } from './embeds/animetsu';
 import {
   autoembedBengaliScraper,
   autoembedEnglishScraper,
@@ -110,7 +110,7 @@ import { zunimeEmbeds } from './embeds/zunime';
 import { oneServerScraper } from './sources/1server';
 import { EightStreamScraper } from './sources/8stream';
 import { animeflvScraper } from './sources/animeflv';
-import { AnimetsuEmbeds } from './embeds/animetsu';
+import { animetsuScraper } from './sources/animetsu';
 import { ciaapiScraper } from './sources/cia';
 import { cinemaosScraper } from './sources/cinemaos';
 import { coitusScraper } from './sources/coitus';
