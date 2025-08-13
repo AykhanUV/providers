@@ -2,7 +2,7 @@ import { flags } from '@/entrypoint/utils/targets';
 import { SourcererOutput, makeSourcerer } from '@/providers/base';
 import { MovieScrapeContext, ShowScrapeContext } from '@/utils/context';
 import { NotFoundError } from '@/utils/errors';
-import { createM3U8ProxyUrl, getM3U8ProxyUrl } from '@/utils/proxy';
+import { createM3U8ProxyUrl } from '@/utils/proxy';
 
 const baseUrl = 'https://mappletv.uk';
 
