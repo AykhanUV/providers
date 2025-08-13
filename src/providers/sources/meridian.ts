@@ -133,12 +133,12 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   }
 
   let tokens;
-  for (let i = 0; i < 3; i += 1) {
+  for (let i = 0; i < 7; i += 1) {
     try {
       tokens = await getTokens(ctx, iframeUrl, videoId);
       break;
     } catch (err) {
-      if (err instanceof NotFoundError && err.message === 'Could not retrieve tokens' && i < 2) {
+      if (err instanceof NotFoundError && err.message === 'Could not retrieve tokens' && i < 6) {
         continue;
       }
       throw err;
@@ -146,7 +146,7 @@ async function comboScraper(ctx: ShowScrapeContext | MovieScrapeContext): Promis
   }
 
   if (!tokens) {
-    throw new NotFoundError('Could not retrieve tokens after 3 attempts');
+    throw new NotFoundError('Could not retrieve tokens after 7 attempts');
   }
 
   const { token1, token2, token3 } = tokens;
