@@ -8,13 +8,49 @@ import { EmbedOutput, makeEmbed } from '../base';
 const VIDIFY_SERVERS = ['alfa', 'bravo', 'charlie', 'delta', 'echo', 'foxtrot', 'golf', 'hotel', 'india', 'juliett'];
 
 const baseUrl = 'api.vidify.top';
-const headers = {
-  referer: 'https://player.vidify.top/',
-  origin: 'https://player.vidify.top',
-  Authorization: 'Bearer ,',
-  'User-Agent':
-    'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
-};
+
+const playerUrl = 'https://player.vidify.top/';
+
+let cachedAuthHeader: string | null = null;
+let lastFetched: number = 0;
+
+async function getAuthHeader(ctx: any): Promise<string> {
+  const now = Date.now();
+  // Cache for 1 hour
+  if (cachedAuthHeader && now - lastFetched < 1000 * 60 * 60) {
+    return cachedAuthHeader;
+  }
+
+  const playerPage = await ctx.proxiedFetcher(playerUrl, {
+    headers: {
+      Referer: playerUrl,
+    },
+  });
+
+  const jsFileRegex = /\/assets\/index-([a-zA-Z0-9]+)\.js/;
+  const jsFileMatch = playerPage.match(jsFileRegex);
+  if (!jsFileMatch) {
+    throw new Error('Could not find the JS file URL in the player page');
+  }
+  const jsFileUrl = new URL(jsFileMatch[0], playerUrl).href;
+
+  const jsContent = await ctx.proxiedFetcher(jsFileUrl, {
+    headers: {
+      Referer: playerUrl,
+    },
+  });
+
+  const authRegex = /Authorization:"Bearer\s*([^"]+)"/;
+  const authMatch = jsContent.match(authRegex);
+  if (!authMatch || !authMatch[1]) {
+    throw new Error('Could not extract the authorization header from the JS file');
+  }
+
+  cachedAuthHeader = `Bearer ${authMatch[1]}`;
+  lastFetched = now;
+
+  return cachedAuthHeader;
+}
 
 export function makeVidifyEmbed(id: string, rank: number = 100) {
   const serverIndex = VIDIFY_SERVERS.indexOf(id) + 1;
@@ -37,6 +73,15 @@ export function makeVidifyEmbed(id: string, rank: number = 100) {
         throw new NotFoundError('Unsupported media type');
       }
 
+      const authHeader = await getAuthHeader(ctx);
+      const headers = {
+        referer: 'https://player.vidify.top/',
+        origin: 'https://player.vidify.top',
+        Authorization: authHeader,
+        'User-Agent':
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+      };
+
       const res = await ctx.proxiedFetcher(url, { headers });
       console.log(res);
 
@@ -44,7 +89,7 @@ export function makeVidifyEmbed(id: string, rank: number = 100) {
 
       if (Array.isArray(res.result) && res.result.length > 0) {
         const qualities: Record<string, { type: 'mp4'; url: string }> = {};
-        res.result.forEach((r) => {
+        res.result.forEach((r: any) => {
           if (r.url.includes('.mp4')) {
             qualities[`${r.resolution}p`] = { type: 'mp4', url: decodeURIComponent(r.url) };
           }
