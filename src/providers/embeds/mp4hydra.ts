@@ -12,7 +12,7 @@ const providers = [
     id: 'mp4hydra-2',
     name: 'MP4Hydra Server 2',
     rank: 35,
-    disabled: false,
+    disabled: true,
   },
 ];
 
@@ -21,7 +21,7 @@ function embed(provider: { id: string; name: string; rank: number; disabled?: bo
     id: provider.id,
     name: provider.name,
     // disabled: provider.disabled,
-    disabled: false,
+    disabled: true,
     rank: provider.rank,
     async scrape(ctx) {
       const [url, quality] = ctx.url.split('|');
